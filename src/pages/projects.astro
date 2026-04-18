@@ -3,11 +3,11 @@ import Layout from '../layouts/Layout.astro';
 
 const projects = [
   {
-    title: 'AI Commerce Experiments',
-    description: 'Exploring how large language models and AI agents can be applied to B2B purchasing workflows, catalog management, and intelligent buyer experiences.',
-    tags: ['AI', 'Commerce', 'B2B', 'LLMs'],
-    status: 'In Progress',
-    url: null,
+    title: 'Build an AI Email Responder That Sounds Like You',
+    description: 'A guide to creating a Claude Cowork scheduled task that reads your inbox, learns your writing voice, and drafts replies automatically. You review and send — never start from scratch.',
+    tags: ['AI', 'Claude', 'Automation', 'Productivity'],
+    status: 'Published',
+    url: '/projects/ai-email-responder',
   },
 ];
 ---
@@ -25,7 +25,7 @@ const projects = [
 
     <div class="projects-grid">
       {projects.map((project) => (
-        <div class="project-card card">
+        <a href={project.url ?? '#'} class="project-card card" style={!project.url ? 'pointer-events:none' : ''}>
           <div class="project-card-header">
             <span class={`status-badge status-${project.status.toLowerCase().replace(' ', '-')}`}>
               {project.status}
@@ -38,12 +38,10 @@ const projects = [
               {project.tags.map(tag => <span class="tag">{tag}</span>)}
             </div>
             {project.url && (
-              <a href={project.url} target="_blank" rel="noopener" class="project-link">
-                View project →
-              </a>
+              <span class="project-link">Read more →</span>
             )}
           </div>
-        </div>
+        </a>
       ))}
 
       <div class="card placeholder-card">
@@ -84,6 +82,12 @@ const projects = [
     color: #f59e0b;
     background: rgba(245, 158, 11, 0.1);
     border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .status-published {
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
   }
 
   .status-complete {

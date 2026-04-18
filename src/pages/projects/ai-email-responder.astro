@@ -1,0 +1,363 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Build an AI Email Responder That Sounds Like You — Lance Owide"
+  description="A guide to creating a Claude Cowork scheduled task that reads your inbox, learns your voice, and drafts replies automatically."
+>
+  <div class="page">
+    <div class="project-header">
+      <a href="/projects" class="back-link">← Projects</a>
+
+      <div class="meta-row">
+        <span class="tag">AI</span>
+        <span class="tag">Claude</span>
+        <span class="tag">Automation</span>
+        <span class="tag">Productivity</span>
+        <span class="status-badge">Published</span>
+      </div>
+
+      <h1 class="project-title">Build an AI Email Responder<br />That Sounds Like You</h1>
+      <p class="project-subtitle">
+        A scheduled Claude Cowork task that reads your inbox, learns your voice, and drafts replies automatically — so you review and send, never start from scratch.
+      </p>
+
+      <a href="/media/ai-email-responder.pdf" target="_blank" rel="noopener" class="btn btn-primary pdf-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Download the Guide (PDF)
+      </a>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- What it does -->
+    <section class="project-section">
+      <h2 class="section-heading">What It Does</h2>
+      <p class="section-intro">
+        The responder runs on a schedule you set — every 10 minutes, hourly, once a day — and handles the heavy lifting of inbox triage and drafting. You keep full control: nothing ever sends without you.
+      </p>
+      <div class="feature-list">
+        <div class="feature">
+          <div class="feature-icon">🎙️</div>
+          <div>
+            <div class="feature-title">Clones your voice</div>
+            <div class="feature-desc">Analyses your sent emails — greetings, sign-offs, sentence structure, vocabulary, formality — and builds a voice profile so every draft sounds like you wrote it.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🎯</div>
+          <div>
+            <div class="feature-title">Adapts tone by recipient</div>
+            <div class="feature-desc">Learns how you write differently to teammates, clients, leadership, and partners — then matches the right tone to whoever you're responding to.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🧠</div>
+          <div>
+            <div class="feature-title">Pulls context from your history</div>
+            <div class="feature-desc">Remembers projects, decisions, and commitments you've referenced so replies are informed, not generic.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📚</div>
+          <div>
+            <div class="feature-title">Leverages product knowledge</div>
+            <div class="feature-desc">References your company's public documentation and web sources when technical questions come up in emails.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔍</div>
+          <div>
+            <div class="feature-title">Filters intelligently</div>
+            <div class="feature-desc">Only drafts replies for emails that actually need a response. Skips newsletters, notifications, marketing, and FYI-only messages.</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🛡️</div>
+          <div>
+            <div class="feature-title">Built-in safety guardrails</div>
+            <div class="feature-desc">Never sends anything automatically — only creates drafts. Flags sensitive topics with <code>[PLEASE REVIEW]</code> and uncertain claims with <code>[VERIFY]</code>.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- How it works -->
+    <section class="project-section">
+      <h2 class="section-heading">How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <div class="step-body">
+            <div class="step-title">Generate your personalised task prompt</div>
+            <div class="step-desc">Open Claude with Gmail connected and run the setup prompt from the guide — customised with your company, docs URL, scheduling link, recipient groups, and date range. Claude analyses your sent emails and outputs a ready-to-use task prompt.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <div class="step-body">
+            <div class="step-title">Create the scheduled task in Cowork</div>
+            <div class="step-desc">Paste the generated prompt into a new Cowork scheduled task. Set your frequency — every 10 minutes for a high-volume inbox, once daily for a lighter one — and restrict to business hours if needed.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <div class="step-body">
+            <div class="step-title">Review drafts in Gmail and send</div>
+            <div class="step-desc">After each run, open your Gmail Drafts folder. Check <code>[PLEASE REVIEW]</code> tags first, tweak anything that needs it, and send. The goal is eliminating the blank-page problem — not blind trust.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Requirements -->
+    <section class="project-section">
+      <h2 class="section-heading">What You Need</h2>
+      <div class="requirements">
+        <div class="req">
+          <div class="req-label">App</div>
+          <div class="req-value">Claude Desktop with Cowork enabled</div>
+        </div>
+        <div class="req">
+          <div class="req-label">Integration</div>
+          <div class="req-value">Gmail connected in Claude integrations</div>
+        </div>
+        <div class="req">
+          <div class="req-label">Account</div>
+          <div class="req-value">Claude Pro, Team, or Enterprise</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- CTA -->
+    <section class="project-cta">
+      <h2 class="cta-title">Get the full guide</h2>
+      <p class="cta-desc">The PDF walks through every step — setup prompt, task creation, customisation options, and extensions to make it even more powerful.</p>
+      <a href="/media/ai-email-responder.pdf" target="_blank" rel="noopener" class="btn btn-primary pdf-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Download the Guide (PDF)
+      </a>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover { color: var(--text); }
+
+  .project-header {
+    max-width: 700px;
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .status-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .project-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .project-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+    max-width: 600px;
+  }
+
+  .pdf-btn {
+    gap: 0.5rem;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  .project-section {
+    max-width: 700px;
+  }
+
+  .section-heading {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+  }
+
+  .section-intro {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+  }
+
+  /* Features */
+  .feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .feature {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    font-size: 1.2rem;
+    width: 2rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .feature-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .feature-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  code {
+    font-size: 0.8rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-family: "SF Mono", "Fira Code", monospace;
+    color: var(--accent-hover);
+  }
+
+  /* Steps */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step:first-child { border-top: 1px solid var(--border); }
+
+  .step-number {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.15rem;
+    width: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .step-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* Requirements */
+  .requirements {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .req {
+    display: flex;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding: 0.9rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .req-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .req-value {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  /* CTA */
+  .project-cta {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 560px;
+  }
+
+  .cta-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+</style>
