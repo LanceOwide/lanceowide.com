@@ -12,7 +12,19 @@ const appearances: {
   title: string;
   description: string;
   url: string;
+  image?: string;
 }[] = [
+  {
+    date: '2026-03',
+    filter: 'writing',
+    badge: 'Article',
+    role: 'Author',
+    outlet: 'Industrial Distribution — Tech Talk',
+    title: '2026 Outlook: How B2B Leaders Can Stay Ahead',
+    description: 'Five trends shaping B2B commerce in 2026 — the two-speed buyer reality, platform agility as a KPI, data liquidity as a margin driver, practical AI, and consolidation for reliability.',
+    url: 'https://editions.mydigitalpublication.com/publication/?i=862106&p=28&view=issueViewer',
+    image: '/media/industrial-distribution-2026.jpg',
+  },
   {
     date: '2026-02-13',
     filter: 'press',
@@ -737,9 +749,14 @@ const counts: Record<FilterKey, number> = {
           href={item.url}
           target="_blank"
           rel="noopener"
-          class="media-item"
+          class:list={['media-item', { 'has-image': !!item.image }]}
           data-filter={item.filter}
         >
+          {item.image && (
+            <div class="media-thumb">
+              <img src={item.image} alt={item.title} loading="lazy" />
+            </div>
+          )}
           <div class="media-item-body">
             <div class="media-top">
               <span class={`badge badge-${item.filter}`}>{item.badge}</span>
@@ -943,6 +960,23 @@ const counts: Record<FilterKey, number> = {
     line-height: 1.6;
   }
 
+  .media-thumb {
+    flex-shrink: 0;
+    width: 140px;
+    height: 90px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+
+  .media-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
   .media-arrow {
     flex-shrink: 0;
     color: var(--text-subtle);
@@ -965,5 +999,6 @@ const counts: Record<FilterKey, number> = {
 
   @media (max-width: 600px) {
     .media-arrow { display: none; }
+    .media-thumb { display: none; }
   }
 </style>
