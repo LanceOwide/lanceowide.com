@@ -1,0 +1,148 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const projects = [
+  {
+    title: 'AI Commerce Experiments',
+    description: 'Exploring how large language models and AI agents can be applied to B2B purchasing workflows, catalog management, and intelligent buyer experiences.',
+    tags: ['AI', 'Commerce', 'B2B', 'LLMs'],
+    status: 'In Progress',
+    url: null,
+  },
+];
+---
+
+<Layout
+  title="Projects — Lance Owide"
+  description="Projects and experiments by Lance Owide — exploring AI, commerce, and what's next."
+>
+  <div class="page">
+    <div class="page-header">
+      <div class="page-label">Projects</div>
+      <h1 class="page-title">Things I'm building</h1>
+      <p class="page-desc">Side projects, experiments, and explorations — mostly around AI and commerce.</p>
+    </div>
+
+    <div class="projects-grid">
+      {projects.map((project) => (
+        <div class="project-card card">
+          <div class="project-card-header">
+            <span class={`status-badge status-${project.status.toLowerCase().replace(' ', '-')}`}>
+              {project.status}
+            </span>
+          </div>
+          <h2 class="project-title">{project.title}</h2>
+          <p class="project-desc">{project.description}</p>
+          <div class="project-footer">
+            <div class="tags">
+              {project.tags.map(tag => <span class="tag">{tag}</span>)}
+            </div>
+            {project.url && (
+              <a href={project.url} target="_blank" rel="noopener" class="project-link">
+                View project →
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+
+      <div class="card placeholder-card">
+        <div class="placeholder-icon">＋</div>
+        <div class="placeholder-text">More projects coming soon</div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .project-card-header {
+    margin-bottom: 1rem;
+  }
+
+  .status-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .status-in-progress {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .status-complete {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .project-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.6rem;
+  }
+
+  .project-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .project-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 1.25rem;
+    gap: 1rem;
+  }
+
+  .project-link {
+    font-size: 0.85rem;
+    color: var(--accent);
+    white-space: nowrap;
+    transition: color 0.15s;
+    flex-shrink: 0;
+  }
+
+  .project-link:hover {
+    color: var(--accent-hover);
+  }
+
+  .placeholder-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 160px;
+    border-style: dashed;
+  }
+
+  .placeholder-icon {
+    font-size: 1.5rem;
+    color: var(--text-subtle);
+  }
+
+  .placeholder-text {
+    font-size: 0.875rem;
+    color: var(--text-subtle);
+  }
+</style>

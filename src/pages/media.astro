@@ -1,0 +1,186 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const appearances = [
+  {
+    outlet: 'The Hard Truth About B2B eCommerce',
+    title: 'Episode 156: Lance Owide, General Manager B2B at BigCommerce',
+    description: 'Insights on the evolving landscape of B2B eCommerce, agility and incremental growth, and BigCommerce\'s AI-driven strategies and immersive buyer experiences.',
+    type: 'Podcast',
+    url: 'https://www.b2becommerce.io/1076401/episodes/17539686-episode-156-lance-owide-general-manager-b2b-at-bigcommerce',
+  },
+  {
+    outlet: 'The Hard Truth About B2B eCommerce',
+    title: 'Episode 102: Lance Owide, General Manager B2B at BigCommerce',
+    description: 'An earlier conversation covering BigCommerce\'s B2B platform strategy and the key shifts happening across B2B digital commerce.',
+    type: 'Podcast',
+    url: 'https://www.b2becommerce.io/1076401/episodes/13484533-episode-102-lance-owide-general-manager-b2b-at-bigcommerce',
+  },
+  {
+    outlet: 'The BIG, commerce Podcast',
+    title: 'Unleashing your B2B ecommerce website with the new BigCommerce B2B Edition',
+    description: 'Discussing the game-changing B2B Edition and how it\'s revolutionising B2B ecommerce for manufacturers, distributors, and wholesalers.',
+    type: 'Podcast',
+    url: 'https://thebigcommercepodcast.com/1166936/episodes/13031482-unleashing-your-b2b-ecommerce-website-with-the-new-bigcommerce-b2b-edition-with-lance-owide-from-bigcommerce',
+  },
+  {
+    outlet: 'eCommerce Masters · Groove Commerce',
+    title: 'The Future of B2B eCommerce with Lance Owide — EP010',
+    description: 'A deep dive into the explosive transformation of B2B commerce and what businesses need to do to stay ahead.',
+    type: 'Podcast',
+    url: 'https://www.groovecommerce.com/ecommerce-blog/bigcommerce-feedonomics-lance-owide',
+  },
+  {
+    outlet: 'How She Got Here',
+    title: 'Lance Owide and Paul Dabrowski (BigCommerce) — Episode 1 (Bonus)',
+    description: 'A bonus episode of How She Got Here where Lance and Paul Dabrowski share perspectives on ecommerce and careers at BigCommerce.',
+    type: 'Podcast / Video',
+    url: 'https://www.youtube.com/watch?v=qVhit8AEPdA',
+  },
+  {
+    outlet: 'Industrial Distribution',
+    title: '5 Minutes with ID: Lance Owide, BigCommerce',
+    description: 'A quick-fire interview covering BigCommerce\'s B2B strategy and what industrial distributors need from their ecommerce platforms.',
+    type: 'Video',
+    url: 'https://www.inddist.com/video/video/22847450/5-minutes-with-id-lance-owide-bigcommerce',
+  },
+  {
+    outlet: 'BigCommerce Blog',
+    title: 'Articles by Lance Owide',
+    description: 'Written pieces on B2B commerce strategy, trends, and technology published on the BigCommerce blog.',
+    type: 'Articles',
+    url: 'https://www.bigcommerce.com/blog/author/lance-owide/',
+  },
+];
+---
+
+<Layout
+  title="Media — Lance Owide"
+  description="Podcast appearances, interviews, and articles featuring Lance Owide on B2B commerce, AI, and product strategy."
+>
+  <div class="page">
+    <div class="page-header">
+      <div class="page-label">Media</div>
+      <h1 class="page-title">Appearances & Press</h1>
+      <p class="page-desc">Podcasts, interviews, and articles on B2B commerce, AI, and digital transformation.</p>
+    </div>
+
+    <div class="media-list">
+      {appearances.map((item) => (
+        <a href={item.url} target="_blank" rel="noopener" class="media-item">
+          <div class="media-item-left">
+            <div class="media-type-badge">{item.type}</div>
+          </div>
+          <div class="media-item-body">
+            <div class="media-outlet">{item.outlet}</div>
+            <div class="media-title">{item.title}</div>
+            <div class="media-desc">{item.description}</div>
+          </div>
+          <div class="media-arrow">→</div>
+        </a>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .media-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .media-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    transition: background 0.15s;
+    border-radius: 0;
+    margin: 0 -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .media-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  .media-item:hover {
+    background: var(--surface);
+  }
+
+  .media-item-left {
+    flex-shrink: 0;
+    padding-top: 0.15rem;
+  }
+
+  .media-type-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .media-item-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .media-outlet {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    margin-bottom: 0.35rem;
+  }
+
+  .media-title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+
+  .media-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .media-arrow {
+    flex-shrink: 0;
+    color: var(--text-subtle);
+    font-size: 1.1rem;
+    padding-top: 0.15rem;
+    transition: color 0.15s, transform 0.15s;
+  }
+
+  .media-item:hover .media-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 600px) {
+    .media-item {
+      gap: 1rem;
+      margin: 0 -0.5rem;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    .media-arrow {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,191 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="About — Lance Owide"
+  description="Lance Owide is General Manager B2B at BigCommerce, focused on the future of B2B commerce and AI."
+>
+  <div class="page">
+    <div class="about-layout">
+      <aside class="about-aside">
+        <img src="/headshot.jpg" alt="Lance Owide" class="about-photo" />
+        <div class="about-meta">
+          <div class="meta-item">
+            <span class="meta-label">Role</span>
+            <span class="meta-value">General Manager B2B</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Company</span>
+            <a href="https://www.bigcommerce.com" target="_blank" rel="noopener" class="meta-link">BigCommerce</a>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">LinkedIn</span>
+            <a href="https://www.linkedin.com/in/lance-owide/" target="_blank" rel="noopener" class="meta-link">lance-owide</a>
+          </div>
+        </div>
+      </aside>
+
+      <div class="about-content">
+        <div class="page-label">About</div>
+        <h1 class="page-title">Lance Owide</h1>
+
+        <div class="prose">
+          <p>
+            I'm the General Manager of B2B at BigCommerce, where I lead the global strategy for B2B commerce — spanning go-to-market, sales, customer success, and product direction. My focus is on helping manufacturers, distributors, and wholesalers build best-in-class digital buying experiences for their business customers.
+          </p>
+          <p>
+            B2B commerce is in the middle of a massive transformation. Buyers increasingly expect consumer-grade digital experiences, and AI is accelerating what's possible — from intelligent product discovery and personalised pricing to automated procurement workflows. This sits at the intersection of what I think about most.
+          </p>
+          <p>
+            Outside of BigCommerce, I spend time exploring how AI is changing the way we build products and companies. I'm particularly interested in applied AI — how large language models and agents can be put to work on real business problems today, not just in theory.
+          </p>
+          <p>
+            I'm also a mentor on MentorCruise, working with founders and operators on business strategy and go-to-market.
+          </p>
+        </div>
+
+        <div class="currently">
+          <h2 class="currently-title">Currently</h2>
+          <ul class="currently-list">
+            <li>Building the B2B product and GTM strategy at BigCommerce</li>
+            <li>Exploring AI applications in commerce and B2B workflows</li>
+            <li>Mentoring operators and founders on strategy and growth</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .about-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-aside {
+    position: sticky;
+    top: calc(var(--nav-height) + 2rem);
+  }
+
+  .about-photo {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: var(--radius);
+    object-fit: cover;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    margin-bottom: 1.5rem;
+  }
+
+  .about-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .meta-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+  }
+
+  .meta-value {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .meta-link {
+    font-size: 0.9rem;
+    color: var(--accent);
+    transition: color 0.15s;
+  }
+
+  .meta-link:hover {
+    color: var(--accent-hover);
+  }
+
+  .about-content .page-label {
+    margin-bottom: 0.5rem;
+  }
+
+  .about-content .page-title {
+    margin-bottom: 2rem;
+  }
+
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .prose p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  .currently {
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .currently-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .currently-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .currently-list li {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    padding-left: 1.25rem;
+    position: relative;
+  }
+
+  .currently-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    .about-layout {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .about-aside {
+      position: static;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+
+    .about-photo {
+      width: 100px;
+      flex-shrink: 0;
+      margin-bottom: 0;
+    }
+  }
+</style>
