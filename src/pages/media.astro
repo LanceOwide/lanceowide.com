@@ -1,77 +1,750 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const appearances = [
+type FilterKey = 'all' | 'host' | 'guest' | 'writing' | 'conference' | 'press' | 'video';
+
+const appearances: {
+  date: string;
+  filter: FilterKey;
+  badge: string;
+  role: string;
+  outlet: string;
+  title: string;
+  description: string;
+  url: string;
+}[] = [
   {
-    outlet: 'The Hard Truth About B2B eCommerce',
-    title: 'Episode 156: Lance Owide, General Manager B2B at BigCommerce',
-    description: 'Insights on the evolving landscape of B2B eCommerce, agility and incremental growth, and BigCommerce\'s AI-driven strategies and immersive buyer experiences.',
-    type: 'Podcast',
+    date: '2026-02-13',
+    filter: 'press',
+    badge: 'Press',
+    role: 'Launch Spokesperson',
+    outlet: 'BigCommerce Blog',
+    title: 'Introducing Distributed Ecommerce Hub',
+    description: 'Quoted as launch spokesperson for Distributed Ecommerce Hub — product announcement for manufacturers, distributors, and franchises managing network-wide storefronts.',
+    url: 'https://www.bigcommerce.com/blog/distributed-ecommerce-hub/',
+  },
+  {
+    date: '2025-11',
+    filter: 'conference',
+    badge: 'Conference',
+    role: 'Featured Speaker',
+    outlet: 'BigCommerce Blog',
+    title: 'Top Ecommerce Conferences in 2026 — B2B Online Session Recap',
+    description: 'Referenced B2B Online fireside chat with Jacob Jones (VP IT, Sellars) on launching ecommerce in a traditional sales-driven business — platform selection, data readiness, cross-functional alignment.',
+    url: 'https://www.bigcommerce.com/blog/top-ecommerce-conferences/',
+  },
+  {
+    date: '2025-11-13',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Creating the Silent Salesman: MTM Recognition\'s Journey',
+    description: 'MTM Recognition\'s digital transformation with Ashley Andersen — resulting in a 6x revenue increase since switching to BigCommerce.',
+    url: 'https://podcasts.apple.com/us/podcast/creating-the-silent-salesman-mtm-recognitions-journey/id1804419880?i=1000736605599&uo=4',
+  },
+  {
+    date: '2025-10-30',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Designing Trustworthy B2B Experiences',
+    description: 'Simon Robillard (VP, O2 Commerce) on creating B2B experiences that build trust and success.',
+    url: 'https://podcasts.apple.com/us/podcast/designing-trustworthy-b2b-experiences/id1804419880?i=1000734226421&uo=4',
+  },
+  {
+    date: '2025-10-16',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'How to Future-Prepare Your B2B',
+    description: 'Darin Lynch (CEO, Irish Titan) on building what\'s next for B2B — why you can\'t future-proof for what you can\'t predict, but you can future-prepare.',
+    url: 'https://podcasts.apple.com/us/podcast/how-to-future-prepare-your-b2b/id1804419880?i=1000732147985&uo=4',
+  },
+  {
+    date: '2025-10-02',
+    filter: 'writing',
+    badge: 'Article',
+    role: 'Author',
+    outlet: 'BigCommerce Blog',
+    title: 'IDC Independently Confirms That Businesses Using B2B Edition Grow Faster',
+    description: 'Byline on the IDC Business Value Assessment — 391% ROI over 3 years, 7-month payback, $393K in annual benefits per 1,000 customers.',
+    url: 'https://www.bigcommerce.com/blog/idc-bva-study/',
+  },
+  {
+    date: '2025-10-02',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Silk Commerce: What it Means to Go B2B2X',
+    description: 'Michael Payne (Silk Commerce, B2B Excellence Award winner) on modernising wholesale and distributor commerce.',
+    url: 'https://podcasts.apple.com/us/podcast/silk-commerce-what-it-means-to-go-b2b2x/id1804419880?i=1000729719301&uo=4',
+  },
+  {
+    date: '2025-09-30',
+    filter: 'guest',
+    badge: 'Podcast · Guest',
+    role: 'Co-Guest',
+    outlet: 'MDM Podcast — Modern Distribution Management',
+    title: 'MDM Amplify: The Human Side of Digital Commerce',
+    description: 'With Devashish Saxena and MDM\'s Mike Hockett — why digital transformation is a human-first journey, the Chief AI Officer role, and intentional ecommerce strategy.',
+    url: 'https://www.mdm.com/sponsored-content/technology/ai/mdm-amplify-the-human-side-of-digital-commerce/',
+  },
+  {
+    date: '2025-09-18',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Americaneagle.com on Building What B2B Needs Next',
+    description: 'Derek Cwik and Michael Vasta (Americaneagle.com) on solving the unique business needs of B2B companies, whether new to online or digitally mature.',
+    url: 'https://podcasts.apple.com/us/podcast/americaneagle-com-on-building-what-b2b-needs-next/id1804419880?i=1000727360718&uo=4',
+  },
+  {
+    date: '2025-09-17',
+    filter: 'guest',
+    badge: 'Interview',
+    role: 'Interviewee',
+    outlet: 'Digital Commerce 360',
+    title: 'Q&A: How Agentic AI Is Redefining B2B Digital Commerce',
+    description: 'Deep Q&A on agentic AI vs automation, data foundations, contract pricing/approval workflows, ROI tracking, and the evolution of sales roles.',
+    url: 'https://www.digitalcommerce360.com/2025/09/17/how-agentic-ai-is-redefining-b2b-digital-commerce/',
+  },
+  {
+    date: '2025-09-11',
+    filter: 'writing',
+    badge: 'Article',
+    role: 'Author',
+    outlet: 'BigCommerce Blog',
+    title: 'Built for B2B: Why BigCommerce Outperforms Shopify for Manufacturers and Distributors',
+    description: 'Competitive positioning piece on BigCommerce vs Shopify for manufacturers and distributors.',
+    url: 'https://www.bigcommerce.com/blog/built-for-b2b/',
+  },
+  {
+    date: '2025-09-10',
+    filter: 'conference',
+    badge: 'Conference',
+    role: 'Panelist & Emcee',
+    outlet: 'BigSummit APAC 2025 — Sydney',
+    title: 'Scaling for Tomorrow: B2B Strategies / The Next Big Thing Panel',
+    description: 'Joined the B2B strategy panel and emceed the breakout session track. Panel covered FeedAI, B2B multi-entity hierarchies, and CPQ workflows.',
+    url: 'https://www.bigcommerce.com/blog/2025-apac-bigsummit/',
+  },
+  {
+    date: '2025-09-04',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Passion Meets Purpose: Justin King on Educating in B2B',
+    description: 'Justin King (MD, B2B Association) on his passion for elevating B2B careers and the unique lessons from his journey in the industry.',
+    url: 'https://podcasts.apple.com/us/podcast/passion-meets-purpose-justin-king-on-educating-in-b2b/id1804419880?i=1000725004347&uo=4',
+  },
+  {
+    date: '2025-08-21',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Digitally Transforming Boston Scientific: Part Two',
+    description: 'Deirdre Peters (Head of Digital Commerce, Boston Scientific) dives deeper into her digital transformation journey, B2B vs B2C differences, and where the industry is heading.',
+    url: 'https://podcasts.apple.com/us/podcast/digitally-transforming-boston-scientific-part-two/id1804419880?i=1000722960049&uo=4',
+  },
+  {
+    date: '2025-08-07',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Digitally Transforming Boston Scientific: Part One',
+    description: 'Deirdre Peters (Head of Digital Commerce, Boston Scientific) on career paths, digital transformation, and all things B2B manufacturing.',
+    url: 'https://podcasts.apple.com/us/podcast/digitally-transforming-boston-scientific-part-one/id1804419880?i=1000721069985&uo=4',
+  },
+  {
+    date: '2025-07-24',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Bringing a Touch of B2C to Your B2B: GlassCraft Door Company\'s Story',
+    description: 'Donald Polansky (GlassCraft Door Company) on modernising the company\'s online ordering system and making digital transformation approachable.',
+    url: 'https://podcasts.apple.com/us/podcast/bringing-a-touch-of-b2c-to-your-b2b-glasscraft/id1804419880?i=1000718861191&uo=4',
+  },
+  {
+    date: '2025-07-23',
+    filter: 'guest',
+    badge: 'Podcast · Guest',
+    role: 'Guest',
+    outlet: 'The Hard Truth About B2B eCommerce — Trellis',
+    title: 'Episode 156: Lance Owide (Return Appearance)',
+    description: 'Second appearance with Isaiah Bollinger and Timothy Peterson. Agility, incremental growth, AI-driven sales tools, and immersive buyer experiences.',
     url: 'https://www.b2becommerce.io/1076401/episodes/17539686-episode-156-lance-owide-general-manager-b2b-at-bigcommerce',
   },
   {
-    outlet: 'The Hard Truth About B2B eCommerce',
-    title: 'Episode 102: Lance Owide, General Manager B2B at BigCommerce',
-    description: 'An earlier conversation covering BigCommerce\'s B2B platform strategy and the key shifts happening across B2B digital commerce.',
-    type: 'Podcast',
-    url: 'https://www.b2becommerce.io/1076401/episodes/13484533-episode-102-lance-owide-general-manager-b2b-at-bigcommerce',
+    date: '2025-07-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Bringing More Voices to the B2B Table with Cassandra Cross',
+    description: 'Cassandra Cross (VP Partnerships, Cronix; host of How She Got Here) on lifting up the voices of women in B2B.',
+    url: 'https://podcasts.apple.com/us/podcast/bringing-more-voices-to-the-b2b-table-with-cassandra-cross/id1804419880?i=1000716686236&uo=4',
   },
   {
-    outlet: 'The BIG, commerce Podcast',
-    title: 'Unleashing your B2B ecommerce website with the new BigCommerce B2B Edition',
-    description: 'Discussing the game-changing B2B Edition and how it\'s revolutionising B2B ecommerce for manufacturers, distributors, and wholesalers.',
-    type: 'Podcast',
-    url: 'https://thebigcommercepodcast.com/1166936/episodes/13031482-unleashing-your-b2b-ecommerce-website-with-the-new-bigcommerce-b2b-edition-with-lance-owide-from-bigcommerce',
+    date: '2025-07-04',
+    filter: 'conference',
+    badge: 'Keynote',
+    role: 'Keynote Speaker',
+    outlet: 'B2Beach 2025 — BigCommerce UK',
+    title: 'Opening Keynote: The State of B2B Commerce',
+    description: 'Opened the day unpacking the Digital Maturity Scale — digital leaders are 50% more likely to hit significant growth — and the implications of AI and agentic commerce.',
+    url: 'https://www.bigcommerce.co.uk/blog/b2beach-2025/',
   },
   {
-    outlet: 'eCommerce Masters · Groove Commerce',
-    title: 'The Future of B2B eCommerce with Lance Owide — EP010',
-    description: 'A deep dive into the explosive transformation of B2B commerce and what businesses need to do to stay ahead.',
-    type: 'Podcast',
+    date: '2025-06-26',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Digitally Transforming a Heritage Brand: Norsland Lefse\'s Story',
+    description: 'Lori McDonald on taking Norsland Lefse online and the learnings from digitally transforming a legacy brand.',
+    url: 'https://podcasts.apple.com/us/podcast/digitally-transforming-a-heritage-brand-norsland/id1804419880?i=1000714668924&uo=4',
+  },
+  {
+    date: '2025-06-12',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'How to Maximize AI for Your B2B with McFadyen',
+    description: 'Jeff Mikos (Head of Strategy, McFadyen Digital) on practical AI use cases for B2B brands without getting distracted by the hype.',
+    url: 'https://podcasts.apple.com/us/podcast/how-to-maximize-ai-for-your-b2b-with-mcfadyen/id1804419880?i=1000712605018&uo=4',
+  },
+  {
+    date: '2025-05-29',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'How Devashish Saxena Finds Focus and Purpose in Ecommerce Technology',
+    description: 'Devashish Saxena on finding your purpose when leading a B2B team and staying focused on the humanity in every interaction.',
+    url: 'https://podcasts.apple.com/us/podcast/how-devashish-saxena-finds-focus-and-purpose-in/id1804419880?i=1000710433710&uo=4',
+  },
+  {
+    date: '2025-05-15',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Veterinary MedTech in the Digital Age: Movora\'s Story',
+    description: 'Korrie Wilhelm (VP Marketing, Movora) on B2B ecommerce in the veterinary medtech space and fostering accessible product education online.',
+    url: 'https://podcasts.apple.com/us/podcast/veterinary-medtech-in-the-digital-age-movoras-story/id1804419880?i=1000708595383&uo=4',
+  },
+  {
+    date: '2025-05-01',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Efficiency, Sustainability, and Quality in B2B: AS Colour\'s Story',
+    description: 'CEO Clive Ormerod on AS Colour\'s path to becoming the global leader in blank apparel — sustainability, international growth, and adapting to a changing retail landscape.',
+    url: 'https://podcasts.apple.com/us/podcast/efficiency-sustainability-and-quality-in-b2b-as/id1804419880?i=1000705714669&uo=4',
+  },
+  {
+    date: '2025-04-14',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Bringing DTC Experiences to B2B: Sellars\' Story',
+    description: 'Jacob Jones (VP IT, Sellars) on revamping B2B ecommerce strategy — the challenges of going online as a B2B brand and the excitement that comes with it.',
+    url: 'https://podcasts.apple.com/us/podcast/bringing-dtc-experiences-to-b2b-sellars-story/id1804419880?i=1000703527126&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Why Data is Your Business\'s Secret Weapon with Jake Cook',
+    description: 'Jake Cook (CEO, Tadpull) on the best ways to pull and utilise buyer data to increase sales in the long run.',
+    url: 'https://podcasts.apple.com/us/podcast/why-data-is-your-businesss-secret-weapon-with-jake-cook/id1804419880?i=1000700803567&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Demystifying SEO for B2B Brands with Curt Anderson',
+    description: 'Curt Anderson (B2B Ecommerce Evangelist) on actionable SEO tips and tricks for manufacturers new to organic search.',
+    url: 'https://podcasts.apple.com/us/podcast/demystifying-seo-for-b2b-brands-with-curt-anderson/id1804419880?i=1000700803539&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Integrating Sales Teams with Nicole Donnelly',
+    description: 'Nicole Donnelly (CEO, DMG Digital) on how manufacturers can integrate an ecommerce plan that fits their needs without disrupting existing sales teams.',
+    url: 'https://podcasts.apple.com/us/podcast/integrating-sales-teams-with-nicole-donnelly/id1804419880?i=1000700803513&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'B2B Branding with Isaiah Bollinger',
+    description: 'Isaiah Bollinger (CEO, Trellis) on why B2B brands struggle with branding compared to D2C — and how to close the gap.',
+    url: 'https://podcasts.apple.com/us/podcast/b2b-branding-with-isaiah-bollinger/id1804419880?i=1000700803538&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'The Impact of Artificial Intelligence on B2B Ecommerce with Jake Cook',
+    description: 'Jake Cook (Tadpull) on the impact of the AI revolution on the future of B2B ecommerce.',
+    url: 'https://podcasts.apple.com/us/podcast/the-impact-of-artificial-intelligence-on-b2b/id1804419880?i=1000700803620&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'The Power of Video for Digital Marketing Success',
+    description: 'Curt Anderson on why video marketing is important for manufacturers — showing off products and equipment to buyers who can\'t be there in person.',
+    url: 'https://podcasts.apple.com/us/podcast/the-power-of-video-for-digital-marketing-success/id1804419880?i=1000700803460&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Ecommerce Readiness with Nicole Donnelly',
+    description: 'Nicole Donnelly (DMG Digital) on ecommerce readiness consulting for manufacturers — tips and tricks to make adopting new technologies pain-free.',
+    url: 'https://podcasts.apple.com/us/podcast/ecommerce-readiness-with-nicole-donnelly/id1804419880?i=1000700803392&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Creating a Lasting B2B Network with LinkedIn with Curt Anderson',
+    description: 'Curt Anderson on making the most of LinkedIn for B2B brands — how to build a following and grow your brand.',
+    url: 'https://podcasts.apple.com/us/podcast/creating-a-lasting-b2b-network-with-linkedin/id1804419880?i=1000700803618&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'How DTCs Can Start Selling B2B with Jason Greenwood',
+    description: 'Jason Greenwood (Greenwood Consulting) on how D2C brands can open up wholesale channels successfully.',
+    url: 'https://podcasts.apple.com/us/podcast/how-dtcs-can-start-selling-b2b-with-jason-greenwood/id1804419880?i=1000700803672&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'B2B Ecommerce Marketplaces with Verginie Cossett',
+    description: 'Virginie Cosset (Sales Director, Marketplacer) on the benefits of selling through a marketplace — retaining data and growing your B2B.',
+    url: 'https://podcasts.apple.com/us/podcast/b2b-ecommerce-marketplaces-with-verginie-cossett/id1804419880?i=1000700803619&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Digital Transformation with Nicole Donnelly',
+    description: 'Nicole Donnelly (DMG Digital) on making digital transformation adoption pain-free for manufacturers and distributors.',
+    url: 'https://podcasts.apple.com/us/podcast/digital-transformation-with-nicole-donnelly/id1804419880?i=1000700803461&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Getting Customers on Board with Ecommerce with Isaiah Bollinger',
+    description: 'Isaiah Bollinger (Trellis) on ecommerce adoption among B2B customers — how to address apprehensiveness and communicate the benefits of going online.',
+    url: 'https://podcasts.apple.com/us/podcast/getting-customers-on-board-with-ecommerce-with/id1804419880?i=1000700803617&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'B2B Merchandising with Ashley Ching',
+    description: 'Ashley Ching (CEO, Inhaven) on the differences between merchandising for B2B and D2C and the technologies needed for stand-out experiences.',
+    url: 'https://podcasts.apple.com/us/podcast/b2b-merchandising-with-ashley-ching/id1804419880?i=1000700803537&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Marketing and Sales Strategies to Gain a Competitive Edge with Jake Cook',
+    description: 'Jake Cook (Tadpull) on how distributors and manufacturers can leverage the digital era of marketing and sales to their advantage.',
+    url: 'https://podcasts.apple.com/us/podcast/marketing-and-sales-strategies-to-gain-a/id1804419880?i=1000700803536&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'How Manufacturers Can Sell Directly to Consumers',
+    description: 'Jason Greenwood (Greenwood Consulting) on the challenges and opportunities for B2B brands opening D2C channels.',
+    url: 'https://podcasts.apple.com/us/podcast/how-manufacturers-can-sell-directly-to-consumers/id1804419880?i=1000700803644&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'B2B Systems Integration with Isaiah Bollinger',
+    description: 'Isaiah Bollinger (Trellis) on practical approaches to systems integrations for B2B brands who aren\'t highly technically savvy.',
+    url: 'https://podcasts.apple.com/us/podcast/b2b-systems-integration-with-isiah-bollinger/id1804419880?i=1000700803535&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'The Entrepreneurial Journey with Ashley Ching',
+    description: 'Ashley Ching (Founder & CEO, Inhaven) on the world of being a B2B business owner and her inspiring career journey.',
+    url: 'https://podcasts.apple.com/us/podcast/the-entrepreneurial-journey-with-ashley-ching/id1804419880?i=1000700803588&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'How to Exit Your Business with Jake Cook',
+    description: 'Jake Cook (Tadpull) on the complicated topic of exiting a B2B business — tips to make it a smooth transition.',
+    url: 'https://podcasts.apple.com/us/podcast/how-to-exit-your-business-with-jake-cook/id1804419880?i=1000700803616&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Introduction to E-procurement Solutions with Kevin Kazenmeyer',
+    description: 'Kevin Kazenmayer (VP Channel Development, Tradecentric) on e-procurement — ways to optimise and automate to save B2B brands time and money.',
+    url: 'https://podcasts.apple.com/us/podcast/introduction-to-e-procurement-solutions-with-kevin/id1804419880?i=1000700803566&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'Choosing the Right Ecommerce Platform with Isaiah Bollinger',
+    description: 'Isaiah Bollinger (Trellis) on B2B platform selection — what makes a certain ecommerce platform the best match for your brand.',
+    url: 'https://podcasts.apple.com/us/podcast/choosing-the-right-ecommerce-platform-with/id1804419880?i=1000700803491&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'The Benefits of Implementing an E-procurement Solution with Kevin Kazenmeyer',
+    description: 'Kevin Kazenmayer (Tradecentric) on the benefits — and costs — of implementing an e-procurement solution for B2B brands.',
+    url: 'https://podcasts.apple.com/us/podcast/the-benefits-of-implementing-an-e/id1804419880?i=1000700803534&uo=4',
+  },
+  {
+    date: '2025-03-10',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'De-risking Digital and Ecommerce Projects with Jason Greenwood',
+    description: 'Jason Greenwood (Greenwood Consulting) on expert tips for making the D2C-to-wholesale transition risk-free.',
+    url: 'https://podcasts.apple.com/us/podcast/de-risking-digital-and-ecommerce-projects/id1804419880?i=1000700803391&uo=4',
+  },
+  {
+    date: '2025-03-05',
+    filter: 'host',
+    badge: 'Podcast · Host',
+    role: 'Host',
+    outlet: 'B2B Bites — BigCommerce',
+    title: 'B2B Buyer Journey Trends with Shelley Kilpatrick',
+    description: 'Shelley Kilpatrick (BigCommerce Content Marketing) on the B2B Buyer Report — findings from surveying 1,000+ shoppers on their complete buyer journey.',
+    url: 'https://podcasts.apple.com/us/podcast/b2b-buyer-journey-trends-with-shelley-kilpatrick/id1804419880?i=1000700803589&uo=4',
+  },
+  {
+    date: '2024-12-27',
+    filter: 'video',
+    badge: 'Video',
+    role: 'Featured Expert',
+    outlet: 'YouTube — BigCommerce',
+    title: 'B2B eCommerce is Learning from B2C!',
+    description: 'Short-form clip explaining how a billion-dollar building materials distributor uses personalisation to drive smarter customer experiences.',
+    url: 'https://www.youtube.com/watch?v=tP5KdRoSvw8',
+  },
+  {
+    date: '2024-12-17',
+    filter: 'guest',
+    badge: 'Podcast · Guest',
+    role: 'Guest',
+    outlet: 'eCommerce Masters — Groove Commerce',
+    title: 'EP010: The Future of B2B eCommerce with Lance Owide from BigCommerce',
+    description: '46-minute conversation with Ethan Giffin covering path to ecommerce, why B2B grows 2x B2C, ideal merchant profiles, channel conflict, and the B2B roadmap.',
     url: 'https://www.groovecommerce.com/ecommerce-blog/bigcommerce-feedonomics-lance-owide',
   },
   {
-    outlet: 'How She Got Here',
-    title: 'Lance Owide and Paul Dabrowski (BigCommerce) — Episode 1 (Bonus)',
-    description: 'A bonus episode of How She Got Here where Lance and Paul Dabrowski share perspectives on ecommerce and careers at BigCommerce.',
-    type: 'Podcast / Video',
+    date: '2024-11-22',
+    filter: 'writing',
+    badge: 'Article',
+    role: 'Author',
+    outlet: 'Digital Commerce 360',
+    title: 'How AI Is Transforming B2B Ecommerce',
+    description: 'Byline on AI integration with ERP/CRM, data management, quote-to-cash automation, and scaling AI implementations thoughtfully.',
+    url: 'https://www.digitalcommerce360.com/2024/11/22/how-ai-is-transforming-b2b-ecommerce/',
+  },
+  {
+    date: '2024-11-18',
+    filter: 'guest',
+    badge: 'Podcast · Guest',
+    role: 'Guest',
+    outlet: 'How She Got Here — Cassandra Cross',
+    title: 'Episode 1 (BONUS): Lance Owide and Paul Dabrowski',
+    description: 'Bonus episode with Cass Cross and co-guest Paul Dabrowski (BigCommerce) on ecommerce careers and BigCommerce B2B insights.',
     url: 'https://www.youtube.com/watch?v=qVhit8AEPdA',
   },
   {
+    date: '2024-10-03',
+    filter: 'guest',
+    badge: 'Interview',
+    role: 'Interviewee',
+    outlet: 'Folio3 Blog',
+    title: 'Trends & Roadmaps in BigCommerce B2B — Interview with Lance Owide',
+    description: 'Interview with Noman bin Rizwan on the open-source buyer portal, SME empowerment, and the roadmap for B2B at BigCommerce.',
+    url: 'https://ecommerce.folio3.com/blog/bigcommerce-b2b-trends-roadmaps-lance-owide-interview/',
+  },
+  {
+    date: '2024-09-05',
+    filter: 'press',
+    badge: 'Press',
+    role: 'Quoted',
+    outlet: 'BigCommerce Press',
+    title: 'BigCommerce Customers Wovenbyrd and Joval Wines Win B2B Ecommerce Industry Awards',
+    description: 'Quoted on customer wins at the Global Excellence in B2B Ecommerce Awards (B2B Ecommerce Association / Digital Commerce 360).',
+    url: 'https://www.bigcommerce.com/press/releases/bigcommerce-customers-wovenbyrdtm-and-joval-wines-win-b2b-ecommerce-industry/',
+  },
+  {
+    date: '2024-08-26',
+    filter: 'conference',
+    badge: 'Conference',
+    role: 'Speaker',
+    outlet: 'BigSummit 2024 — Austin',
+    title: 'B2B Roadmap Session',
+    description: 'Walked attendees through the new B2B roadmap — elevating buyer experience, customisation, and reducing complexity. Flagship event at ACL Live.',
+    url: 'https://www.bigcommerce.com/blog/bigsummit-2024-recap/',
+  },
+  {
+    date: '2024-07-15',
+    filter: 'guest',
+    badge: 'Podcast · Guest',
+    role: 'Guest',
+    outlet: 'Ziffity',
+    title: 'How to Simplify the B2B Ecommerce Purchase Process',
+    description: 'B2C vs B2B buying journeys, SEO for B2B, PunchOut catalogs, and the BigCommerce–TradeCentric partnership for eProcurement.',
+    url: 'https://www.ziffity.com/blog/b2b-stores-tackle-purchase-challenges/',
+  },
+  {
+    date: '2024-06-04',
+    filter: 'writing',
+    badge: 'Article',
+    role: 'Author',
+    outlet: 'BigCommerce Blog',
+    title: 'Lance Owide Addresses the Latest B2B Analyst Report (Forrester Wave Q2 2024)',
+    description: 'Contrarian byline piece pushing back on Forrester\'s methodology — arguing arbitrary category scoring doesn\'t reflect real B2B transformation outcomes.',
+    url: 'https://www.bigcommerce.com/blog/forrester-wave-b2b-commerce-2024/',
+  },
+  {
+    date: '2024-05-13',
+    filter: 'press',
+    badge: 'Press',
+    role: 'Source / Quoted',
+    outlet: 'Digital Commerce 360',
+    title: 'BigCommerce Sees B2B Driving Up Revenue and Market Share',
+    description: 'Interview with Paul Demery on BigCommerce\'s open-source buyer portal targeting $500M–$1B+ enterprises, including a $15B construction materials manufacturer and $6B electronic components maker.',
+    url: 'https://www.digitalcommerce360.com/2024/05/13/bigcommerce-sees-b2b-driving-up-revenue-and-market-share/',
+  },
+  {
+    date: '2024-04',
+    filter: 'video',
+    badge: 'Video Series',
+    role: 'Host',
+    outlet: 'BigCommerce — LinkedIn & YouTube',
+    title: '#B2BBites Video Series (pre-podcast)',
+    description: 'Original video-only series featuring interviews with B2B experts including Nicole Donnelly, Isaiah Bollinger, and Curt Anderson. Later repackaged as the B2B Bites podcast.',
+    url: 'https://www.linkedin.com/posts/bigcommerce_b2b-bites-isaiah-bollinger-activity-7183524218410602496-6KMr',
+  },
+  {
+    date: '2024-01-24',
+    filter: 'writing',
+    badge: 'Article',
+    role: 'Author',
+    outlet: 'Retail TouchPoints',
+    title: '2024 Predictions and Trends in B2B Ecommerce: Navigating the Digital Evolution',
+    description: 'Executive viewpoint on AI/ML, personalisation, data, social commerce, and security shaping B2B ecommerce in 2024.',
+    url: 'https://www.retailtouchpoints.com/features/executive-viewpoints/2024-predictions-and-trends-in-b2b-ecommerce-navigating-the-digital-evolution',
+  },
+  {
+    date: '2023-10',
+    filter: 'conference',
+    badge: 'Conference',
+    role: 'Interviewer & Session Host',
+    outlet: 'BigCommerce Partner Summit 2023 — Austin',
+    title: 'Modernizing Your B2B Tech Stack With Twin Liquors',
+    description: 'On-stage discussion with Michael Salome and Denise Hoos of Twin Liquors, later released as a Make It Big Podcast episode.',
+    url: 'https://open.spotify.com/episode/0qVXGESbSMTU0dG8GDBajZ',
+  },
+  {
+    date: '2023-09-25',
+    filter: 'video',
+    badge: 'Video',
+    role: 'Featured Expert',
+    outlet: 'BigCommerce / oBundle YouTube',
+    title: 'New BigCommerce B2B Edition Invoice Portal with Lance Owide',
+    description: 'Walkthrough covering B2B trends for the next 5 years, the new Invoice Portal in B2B Edition, and enabling multiple invoices.',
+    url: 'https://www.youtube.com/watch?v=WIkOviU1Vss',
+  },
+  {
+    date: '2023-08-30',
+    filter: 'guest',
+    badge: 'Podcast · Guest',
+    role: 'Guest',
+    outlet: 'The Hard Truth About B2B eCommerce — Trellis',
+    title: 'Episode 102: Lance Owide, General Manager B2B at BigCommerce',
+    description: 'With Isaiah Bollinger and Timothy Peterson — common barriers to B2B ecommerce adoption, the Feedonomics acquisition, and growing BigCommerce\'s B2B segment.',
+    url: 'https://www.b2becommerce.io/1076401/episodes/13484533-episode-102-lance-owide-general-manager-b2b-at-bigcommerce',
+  },
+  {
+    date: '2023-08-28',
+    filter: 'writing',
+    badge: 'Article',
+    role: 'Author',
+    outlet: 'Digital Commerce 360',
+    title: 'Automotive Ecommerce and the Accelerants Driving It Forward',
+    description: 'Byline on why the automotive sector is accelerating online — Millennial buyer behavior, BigCommerce powering 2,500+ automotive sites, and the $75B→$213B market forecast.',
+    url: 'https://www.digitalcommerce360.com/2023/08/28/driving-automotive-ecommerce-forward/',
+  },
+  {
+    date: '2023-06-13',
+    filter: 'guest',
+    badge: 'Podcast · Guest',
+    role: 'Guest',
+    outlet: 'The BIG, commerce Podcast — Calashock',
+    title: 'Unleashing Your B2B Ecommerce Website with the New BigCommerce B2B Edition',
+    description: 'Return appearance with host Luigi Moccia — B2B Edition launch, multi-storefront, headless for B2B, and starting digital transformation with customer interviews.',
+    url: 'https://thebigcommercepodcast.com/1166936/episodes/13031482-unleashing-your-b2b-ecommerce-website-with-the-new-bigcommerce-b2b-edition-with-lance-owide-from-bigcommerce',
+  },
+  {
+    date: '2023-05-02',
+    filter: 'video',
+    badge: 'Video',
+    role: 'Guest',
     outlet: 'Industrial Distribution',
-    title: '5 Minutes with ID: Lance Owide, BigCommerce',
-    description: 'A quick-fire interview covering BigCommerce\'s B2B strategy and what industrial distributors need from their ecommerce platforms.',
-    type: 'Video',
+    title: '5 Minutes with ID: What Distributors Are Missing in E-Commerce',
+    description: 'Short-form video on what distributors get wrong in ecommerce — cost myths, cloud/SaaS as the leveller, and moving beyond transactional hubs.',
     url: 'https://www.inddist.com/video/video/22847450/5-minutes-with-id-lance-owide-bigcommerce',
   },
   {
-    outlet: 'BigCommerce Blog',
-    title: 'Articles by Lance Owide',
-    description: 'Written pieces on B2B commerce strategy, trends, and technology published on the BigCommerce blog.',
-    type: 'Articles',
-    url: 'https://www.bigcommerce.com/blog/author/lance-owide/',
+    date: '2023-04-25',
+    filter: 'video',
+    badge: 'Webinar',
+    role: 'Panelist',
+    outlet: 'BigCommerce / Hawksearch / PROS / oBundle',
+    title: 'Solving B2B Ecommerce Pain Points',
+    description: '30-minute panel on B2B pain points — enterprise pricing, on-site search, and making complex B2B catalogs customer-friendly.',
+    url: 'https://www.linkedin.com/posts/lance-owide_the-new-b2b-buying-experience-activity-7056480787499548672-ptLG',
   },
 ];
+
+const filters: { key: FilterKey; label: string }[] = [
+  { key: 'all', label: 'All' },
+  { key: 'host', label: 'Podcast Host' },
+  { key: 'guest', label: 'Podcast Guest' },
+  { key: 'writing', label: 'Writing' },
+  { key: 'conference', label: 'Conference' },
+  { key: 'press', label: 'Press' },
+  { key: 'video', label: 'Video & Webinar' },
+];
+
+const counts: Record<FilterKey, number> = {
+  all: appearances.length,
+  host: appearances.filter(a => a.filter === 'host').length,
+  guest: appearances.filter(a => a.filter === 'guest').length,
+  writing: appearances.filter(a => a.filter === 'writing').length,
+  conference: appearances.filter(a => a.filter === 'conference').length,
+  press: appearances.filter(a => a.filter === 'press').length,
+  video: appearances.filter(a => a.filter === 'video').length,
+};
 ---
 
 <Layout
   title="Media — Lance Owide"
-  description="Podcast appearances, interviews, and articles featuring Lance Owide on B2B commerce, AI, and product strategy."
+  description="Podcast appearances, interviews, keynotes, and articles featuring Lance Owide on B2B commerce, AI, and digital transformation."
 >
   <div class="page">
     <div class="page-header">
       <div class="page-label">Media</div>
       <h1 class="page-title">Appearances & Press</h1>
-      <p class="page-desc">Podcasts, interviews, and articles on B2B commerce, AI, and digital transformation.</p>
+      <p class="page-desc">Podcasts, keynotes, interviews, and writing on B2B commerce, AI, and digital transformation.</p>
     </div>
 
-    <div class="media-list">
+    <div class="filters" role="tablist">
+      {filters.map(({ key, label }) => (
+        <button
+          class:list={['filter-btn', { active: key === 'all' }]}
+          data-filter={key}
+          role="tab"
+          aria-selected={key === 'all'}
+        >
+          {label}
+          <span class="filter-count">{counts[key]}</span>
+        </button>
+      ))}
+    </div>
+
+    <div class="media-list" id="media-list">
       {appearances.map((item) => (
-        <a href={item.url} target="_blank" rel="noopener" class="media-item">
-          <div class="media-item-left">
-            <div class="media-type-badge">{item.type}</div>
-          </div>
+        <a
+          href={item.url}
+          target="_blank"
+          rel="noopener"
+          class="media-item"
+          data-filter={item.filter}
+        >
           <div class="media-item-body">
+            <div class="media-top">
+              <span class={`badge badge-${item.filter}`}>{item.badge}</span>
+              <span class="media-date">{item.date}</span>
+            </div>
             <div class="media-outlet">{item.outlet}</div>
             <div class="media-title">{item.title}</div>
             <div class="media-desc">{item.description}</div>
@@ -80,28 +753,101 @@ const appearances = [
         </a>
       ))}
     </div>
+
+    <div class="no-results" id="no-results" style="display:none">
+      No results for this filter.
+    </div>
   </div>
 </Layout>
 
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const items = document.querySelectorAll<HTMLElement>('.media-item');
+  const noResults = document.getElementById('no-results')!;
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter!;
+
+      buttons.forEach(b => {
+        b.classList.toggle('active', b === btn);
+        b.setAttribute('aria-selected', String(b === btn));
+      });
+
+      let visible = 0;
+      items.forEach(item => {
+        const show = filter === 'all' || item.dataset.filter === filter;
+        item.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+    });
+  });
+</script>
+
 <style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+  }
+
+  .filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover {
+    border-color: #2e2e2e;
+    color: var(--text);
+  }
+
+  .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .filter-btn.active .filter-count {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  .filter-count {
+    font-size: 0.72rem;
+    background: var(--surface-2);
+    color: var(--text-subtle);
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+  }
+
   .media-list {
     display: flex;
     flex-direction: column;
-    gap: 0;
   }
 
   .media-item {
     display: flex;
     align-items: flex-start;
-    gap: 1.5rem;
-    padding: 1.75rem 0;
+    gap: 1rem;
+    padding: 1.5rem 0.75rem;
+    margin: 0 -0.75rem;
     border-bottom: 1px solid var(--border);
     text-decoration: none;
+    border-radius: 8px;
     transition: background 0.15s;
-    border-radius: 0;
-    margin: 0 -1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
   }
 
   .media-item:first-child {
@@ -112,48 +858,87 @@ const appearances = [
     background: var(--surface);
   }
 
-  .media-item-left {
-    flex-shrink: 0;
-    padding-top: 0.15rem;
-  }
-
-  .media-type-badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: rgba(99, 102, 241, 0.1);
-    border: 1px solid rgba(99, 102, 241, 0.2);
-    padding: 0.2rem 0.5rem;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-
   .media-item-body {
     flex: 1;
     min-width: 0;
   }
 
+  .media-top {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .badge-host {
+    color: #6366f1;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  .badge-guest {
+    color: #06b6d4;
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+  }
+
+  .badge-writing {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .badge-conference {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .badge-press {
+    color: #f472b6;
+    background: rgba(244, 114, 182, 0.1);
+    border: 1px solid rgba(244, 114, 182, 0.2);
+  }
+
+  .badge-video {
+    color: #a78bfa;
+    background: rgba(167, 139, 250, 0.1);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+  }
+
+  .media-date {
+    font-size: 0.78rem;
+    color: var(--text-subtle);
+  }
+
   .media-outlet {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text-subtle);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
   }
 
   .media-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     line-height: 1.4;
-    margin-bottom: 0.5rem;
     color: var(--text);
+    margin-bottom: 0.35rem;
   }
 
   .media-desc {
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     line-height: 1.6;
   }
@@ -161,8 +946,8 @@ const appearances = [
   .media-arrow {
     flex-shrink: 0;
     color: var(--text-subtle);
-    font-size: 1.1rem;
-    padding-top: 0.15rem;
+    font-size: 1rem;
+    padding-top: 0.2rem;
     transition: color 0.15s, transform 0.15s;
   }
 
@@ -171,16 +956,14 @@ const appearances = [
     transform: translateX(3px);
   }
 
-  @media (max-width: 600px) {
-    .media-item {
-      gap: 1rem;
-      margin: 0 -0.5rem;
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
+  .no-results {
+    padding: 3rem 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
 
-    .media-arrow {
-      display: none;
-    }
+  @media (max-width: 600px) {
+    .media-arrow { display: none; }
   }
 </style>
