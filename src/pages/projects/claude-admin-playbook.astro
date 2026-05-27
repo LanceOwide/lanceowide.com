@@ -1,0 +1,644 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="I Trained Claude to Run My Admin — Lance Owide"
+  description="A playbook for three Claude Cowork scheduled tasks that analyze your meetings, draft your Slack and email replies, and propose updates to your product docs, all reading from one shared source of truth."
+>
+  <div class="page">
+    <div class="project-header">
+      <a href="/projects" class="back-link">← Projects</a>
+
+      <div class="meta-row">
+        <span class="tag">AI</span>
+        <span class="tag">Claude</span>
+        <span class="tag">Automation</span>
+        <span class="tag">Productivity</span>
+        <span class="status-badge">Published</span>
+      </div>
+
+      <h1 class="project-title">I Trained Claude to Run My Admin.<br />Here's the Full Playbook.</h1>
+      <p class="project-subtitle">
+        How three scheduled skills, a project index, and a single shared brain gave me back 2-3 hours a day.
+      </p>
+
+      <a href="/media/claude-admin-playbook.pdf" target="_blank" rel="noopener" class="btn btn-primary pdf-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Download the Guide (PDF)
+      </a>
+    </div>
+
+    <div class="divider"></div>
+
+    <article class="prose">
+      <p>If you're a PM leader, a founder, or anyone whose calendar is basically a wall of back-to-back meetings, you know the real work doesn't happen <em>in</em> the meetings. It happens in the hour after.</p>
+
+      <p>The meeting ends. Five product docs need updating. The merchant you just spoke to needs a follow-up email with action items. Two people pinged you in Slack during the call about something you already answered in the meeting. And your inbox has twelve new emails, three of which are partners asking for status updates that require context from three past threads.</p>
+
+      <p>Do that for 40 meetings a week. Multiply it across 50 weeks a year. That's where the admin tax lives.</p>
+
+      <p>This is the story of how I stopped paying that tax. I built three skills in Claude that run on a schedule, talk to each other through a shared set of product docs, and handle the boring-but-critical admin work that was eating my days.</p>
+
+      <p>You can build the same setup. The rest of this post is the playbook.</p>
+
+      <h2>The core idea: skills that share a brain</h2>
+
+      <p>Most people think about AI agents one task at a time. "An email drafter." "A meeting summarizer." "A Slack bot." Each one runs in isolation, does its narrow job, and moves on.</p>
+
+      <p>That's fine, but it leaves value on the table. The real leverage shows up when multiple skills read from the <strong>same source of truth</strong>.</p>
+
+      <p>Here's the setup.</p>
+
+      <p>I have a folder of "product packs" in Google Drive. One doc per active workstream. Every pack contains the current scope, open questions, decisions, risks, and action items for that project. These aren't PRDs, they're living operational docs.</p>
+
+      <p>I also have a <strong>project index</strong>, one master doc that maps keywords and aliases to product pack Doc IDs. When someone says "PO Automation" or "the purchase order thing we're doing with Wolf Automation," the index tells my skills "that's the PO Automation pack, here's the Doc ID."</p>
+
+      <p>And I have a <strong>Meeting Intelligence folder</strong>, where the meeting analyzer creates a new dated doc per run with the full structured analysis.</p>
+
+      <p>Three skills run against this shared brain:</p>
+
+      <ol>
+        <li>A <strong>Meeting Notes Analyzer</strong> that reads my calendar transcripts, matches them to product packs, generates structured update proposals (in the Cowork task output and a fresh Intelligence Doc), and drafts follow-up emails to attendees.</li>
+        <li>A <strong>Slack Responder</strong> that reads my DMs and @mentions and drafts replies in my voice.</li>
+        <li>A <strong>Scheduled Email Responder</strong> that reads my inbox, drafts replies in my voice, and flags the ones that need real attention.</li>
+      </ol>
+
+      <p>They each do useful things individually. But because they all read from the same product packs, something more interesting happens.</p>
+
+      <p>A call happens at 10am. By 10:45, the meeting analyzer has matched the transcript to the right pack, output the new decisions as structured proposals, and drafted the follow-up email. I paste the approved proposals into the pack over coffee.</p>
+
+      <p>At 11, someone Slacks me about that same decision. The Slack responder reads the (now updated) pack and already knows.</p>
+
+      <p>At 2pm, a partner emails asking for a status update. The email drafter pulls context from the same pack and writes a reply that's actually accurate.</p>
+
+      <p>The product docs are the shared brain. The skills are the hands. <strong>I'm the one doing the paste, but the thinking is done.</strong></p>
+
+      <h2>An honest note on what Claude can and can't do with Google Docs</h2>
+
+      <p>I want to address something upfront because it shapes how this whole system works.</p>
+
+      <p><strong>Claude's Google Drive integration can:</strong></p>
+      <ul>
+        <li>Read existing Google Docs (transcripts, project index, product packs)</li>
+        <li>Create new Google Docs (for the Meeting Intelligence archive)</li>
+        <li>Read calendar events and their attached files</li>
+        <li>Create Gmail drafts and Slack drafts</li>
+      </ul>
+
+      <p><strong>Claude's Google Drive integration cannot:</strong></p>
+      <ul>
+        <li>Edit existing Google Docs</li>
+        <li>Append text to existing Google Docs</li>
+        <li>Add comments or suggestions to existing Google Docs</li>
+      </ul>
+
+      <p>This is a current limitation of the integration, not a Claude limitation. The earlier draft of this post claimed the meeting analyzer would "append a Suggested Updates section to each product pack." That doesn't actually work today. I had to redesign the skill around it.</p>
+
+      <p>Here's how it works in practice:</p>
+
+      <p>After each run, the analyzer outputs structured update proposals in two places: (1) the Cowork task log itself, organized by product pack with copy-paste-ready bullet lists, and (2) a new dated Google Doc in your Meeting Intelligence folder containing the full analysis. You review, then paste the approved changes into your product packs manually. It's about 2 minutes of clicking per meeting. The skill does everything else: the listening, the matching, the framing, the email drafting.</p>
+
+      <p>It's not as magical as "the docs update themselves." But it's honest about what's possible today, and the cognitive load is still 95% lifted.</p>
+
+      <h2>What you need before you start</h2>
+
+      <p>Three things.</p>
+
+      <p><strong>Claude Desktop with Cowork enabled.</strong> This is what lets you create scheduled tasks. Regular Claude chat can run any of these skills on demand, but scheduling is where the real leverage comes from.</p>
+
+      <p><strong>Google Workspace connected.</strong> Gmail, Google Calendar, and Google Drive all need to be connected as integrations in Claude. The meeting analyzer needs all three. The email responder needs Gmail. The Slack responder needs the Slack integration.</p>
+
+      <p><strong>A Claude Pro, Team, or Enterprise account.</strong> Scheduled tasks are a paid feature.</p>
+
+      <p>None of this requires code. Everything below is configuration and prompts.</p>
+
+      <h2>Skill 1: Meeting Notes Analyzer</h2>
+
+      <p>This is the most involved of the three skills, and also the one that pays back the most.</p>
+
+      <h3>What it does</h3>
+
+      <p>Every 30 minutes during business hours, the skill:</p>
+
+      <ol>
+        <li>Checks my Google Calendar for meetings that ended in the last 4 hours</li>
+        <li>Looks for meetings that have Google Meet transcripts or attached notes</li>
+        <li>Skips any meeting it's already processed (deduped against the Processed Meetings Log in the project index)</li>
+        <li>For each new meeting, reads the transcript and matches it to one or more product packs via the project index</li>
+        <li><strong>Generates structured "Update Proposal" blocks</strong> for each matched pack, with what to add/change/remove, what section, what source, what rationale, all formatted as copy-paste-ready text</li>
+        <li><strong>Creates a new dated Google Doc</strong> in my Meeting Intelligence folder containing the full analysis (matched projects, all update proposals, action items by owner, cross-project impact, risks, unmatched discussions)</li>
+        <li>Drafts a recap email to the attendees (only for meetings with 8 or fewer people)</li>
+      </ol>
+
+      <p>Step 5 happens in the Cowork task output itself. Step 6 is the archive, which lets me search back through every meeting analysis ever generated. Step 7 lands as a draft in Gmail.</p>
+
+      <h3>The doc and folder you need to create first</h3>
+
+      <p>Before the skill runs, you need one Google Doc and one folder.</p>
+
+      <p><strong>The Project Index doc.</strong> Three parts:</p>
+
+      <div class="config-label">Part 1: Configuration</div>
+      <pre class="config-block">INTELLIGENCE_FOLDER_ID: <span class="placeholder">[paste your Meeting Intelligence folder ID here]</span>
+LOOKBACK_HOURS: 4</pre>
+
+      <div class="config-label">Part 2: Project Mappings</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Project Name</th><th>Aliases</th><th>Product Pack Doc ID</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>PO Automation</td><td>purchase order automation, POs, PO flow</td><td>1abc...xyz</td><td>Active</td></tr>
+          <tr><td>Cascading Price Lists</td><td>CPL, price list fallback, pricing fallback</td><td>1def...uvw</td><td>Active</td></tr>
+        </tbody>
+      </table>
+
+      <div class="config-label">Part 3: Processed Meetings Log</div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Meeting Title</th><th>Date</th><th>Matched Projects</th><th>Timestamp</th></tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="4" class="muted-row">(you paste rows here after reviewing each run's output)</td></tr>
+        </tbody>
+      </table>
+
+      <p>The Aliases column is doing real work. When the skill reads a transcript and someone says "the PO flow thing," it needs to know that maps to PO Automation. Put every nickname, acronym, and shorthand you use in there.</p>
+
+      <p><strong>The Meeting Intelligence folder.</strong> A folder in your Google Drive where the skill will create one new doc per run. Create it, copy its folder ID, paste it into the Configuration section of the index.</p>
+
+      <h3>The setup prompt</h3>
+
+      <p>Open a new Claude conversation with Google Calendar, Google Drive, and Gmail connected. Paste this prompt, customizing the highlighted sections:</p>
+
+      <pre class="prompt-block">Create an automated meeting notes analysis skill that runs on a schedule. Here's what I need:
+
+<span class="comment">-- Calendar lookup --</span>
+Every time this runs, search my Google Calendar for events that ended within the last <span class="highlight">[LOOKBACK WINDOW, e.g., 4 hours]</span>. For each event, check if it has attached Google Docs (notes or transcripts). Skip events with no attachments.
+
+<span class="comment">-- Deduplication --</span>
+I have a Project Index Google Doc at Doc ID <span class="highlight">[YOUR INDEX DOC ID]</span>. In that doc is a "Processed Meetings Log" table. Read that table to identify already-processed meetings. Skip any meeting whose title and date already appear there. At the end of the run, output the newly-processed meetings as a copy-paste-ready row block so I can manually append them to the log table.
+
+<span class="comment">-- Project matching --</span>
+The Project Index contains a table mapping project names and aliases to product pack Doc IDs. For each meeting transcript, read every active project pack first to load context, then scan the transcript against all active projects and tag every project that is meaningfully discussed (not just mentioned). A project qualifies if a decision was made about it, an action item was assigned, scope or timeline was discussed, or dependencies were raised.
+
+<span class="comment">-- Update proposals (IMPORTANT) --</span>
+The Google Drive integration cannot edit, append to, or comment on existing Google Docs. Do NOT attempt to modify product packs directly. Instead, for every matched project, generate a structured "Update Proposal" block in the task output AND in the new Meeting Intelligence Doc (see below). Each proposal should specify: (1) the product pack Doc ID and title, (2) the section of the pack it applies to, (3) the specific text to add/change/remove, (4) the source (meeting + speaker), and (5) the rationale. Format proposals so I can copy-paste them directly into the relevant pack section.
+
+<span class="comment">-- Meeting Intelligence Doc --</span>
+After analyzing each run's meetings, create a new Google Doc in folder ID <span class="highlight">[YOUR INTELLIGENCE FOLDER ID]</span> titled "Meeting Intelligence: [YYYY-MM-DD HH:MM]". Content: (1) meetings processed, (2) matched projects per meeting, (3) all update proposals grouped by product pack, (4) action items grouped by owner, (5) cross-project impact notes, (6) new risks surfaced, (7) unmatched discussions.
+
+<span class="comment">-- Follow-up emails --</span>
+For meetings with 8 or fewer attendees, draft a Gmail recap email to all attendees. Subject line: "Follow up: [Meeting Title]". Write in my voice. Use my name <span class="highlight">[YOUR NAME]</span> in the sign-off. Never send. Always create as a draft.
+
+<span class="comment">-- Voice profile --</span>
+Before drafting any emails, search my sent Gmail from <span class="highlight">[DATE RANGE]</span> and study my writing patterns. Apply that voice to every draft.
+
+<span class="comment">-- Safety guardrails --</span>
+Never send emails automatically. Never attempt to edit existing Google Docs (the integration does not support it). If a meeting discusses a project not in my index, include it in the Intelligence Doc under "Unmatched Discussions" and flag that keywords might need to be added.
+
+<span class="comment">-- Schedule --</span>
+Run every <span class="highlight">[FREQUENCY, e.g., 30 minutes]</span> during business hours on weekdays.
+
+<span class="comment">-- Output --</span>
+Give me the final prompt as plain text that I can paste directly into a Cowork scheduled task. Do not generate code or an HTML file. Just the prompt.</pre>
+
+      <p>Claude will generate a plain-text task prompt. Save that output.</p>
+
+      <h3>Create the scheduled task</h3>
+
+      <ol>
+        <li>Open Claude Desktop and go to Cowork</li>
+        <li>Navigate to Scheduled Tasks</li>
+        <li>Create a new task, name it "Meeting Notes Analyzer"</li>
+        <li>Paste the prompt Claude generated as the instructions</li>
+        <li>Set the frequency and active hours (I recommend every 30 minutes, 8am-7pm, weekdays only)</li>
+        <li>Enable the task</li>
+      </ol>
+
+      <h3>What you'll see after each run</h3>
+
+      <ul>
+        <li><strong>Cowork task output.</strong> A summary of what was processed, structured update proposals per pack, action items by owner, and a list of drafts created.</li>
+        <li><strong>A new Meeting Intelligence Google Doc.</strong> Dated and saved in your folder, containing the full analysis.</li>
+        <li><strong>Gmail drafts.</strong> One per meeting with 8 or fewer attendees, ready for review.</li>
+      </ul>
+
+      <h3>Your 5-minute review workflow</h3>
+
+      <p>Open the Intelligence Doc. Skim the update proposals. Copy the ones you agree with into the relevant product pack sections (in Google Docs, where you can paste, edit, and version-control properly). Delete the rest. Add the meeting to the Processed Meetings Log table in your index. Open Gmail drafts, review, send.</p>
+
+      <p>The first week, I spent about 15 minutes a day doing this. After two weeks, it was down to 5. The proposals get sharper the more the skill learns your voice and the structure of your packs.</p>
+
+      <h2>Skill 2: Slack Responder</h2>
+
+      <p>Simpler than the meeting analyzer, but just as useful.</p>
+
+      <h3>What it does</h3>
+
+      <p>Every hour during business hours, the skill:</p>
+
+      <ol>
+        <li>Searches Slack for DMs and @mentions I haven't responded to</li>
+        <li>Reads the surrounding thread context</li>
+        <li>Drafts a reply in my voice</li>
+        <li>Saves the draft as an attached Slack draft in the relevant channel or DM</li>
+      </ol>
+
+      <p>I open Slack, see the draft, review it, and send. Or edit and send. Or discard and write my own.</p>
+
+      <h3>The setup prompt</h3>
+
+      <pre class="prompt-block">Create an automated Slack responder skill that runs on a schedule. Here's what I need:
+
+<span class="comment">-- Message discovery --</span>
+Every time this runs, search Slack for DMs and @mentions directed at me that I haven't responded to. Focus on messages from the last <span class="highlight">[LOOKBACK WINDOW, e.g., 24 hours]</span>. Skip messages I've already replied to, bot notifications, and channels where I'm a passive member.
+
+<span class="comment">-- Context loading --</span>
+For each message that needs a reply, read the full thread or recent channel history so the draft has proper context. If the message references a project I work on, you can also read the matching product pack via my Project Index for added context.
+
+<span class="comment">-- Voice cloning --</span>
+Search my sent Slack messages from <span class="highlight">[DATE RANGE]</span> to build a voice profile. Apply that voice to every draft. On Slack I'm more casual than email.
+
+<span class="comment">-- Tone by relationship --</span>
+Different audiences get different tones. With direct reports, be short and direct. With peers, be direct but collaborative. With senior leaders or external partners, be slightly more formal but still direct.
+
+<span class="comment">-- Smart filtering --</span>
+Only draft replies for messages that actually need a response. Skip FYI messages, automated notifications, channel-wide announcements, and messages where someone else has already answered. If a message is asking for a meeting, include my scheduling link: <span class="highlight">[YOUR SCHEDULING LINK]</span>.
+
+<span class="comment">-- Safety guardrails --</span>
+Never send messages automatically. Always use the Slack draft tool to create drafts. Flag drafts about sensitive topics (personnel, compensation, legal, budget) with [PLEASE REVIEW] at the top. Mark any uncertain factual claims with [VERIFY].
+
+<span class="comment">-- Schedule --</span>
+Run every <span class="highlight">[FREQUENCY, e.g., hour]</span> during business hours on weekdays.
+
+<span class="comment">-- Output --</span>
+Give me the final prompt as plain text I can paste into a Cowork scheduled task. Not code, not HTML. Just the prompt.</pre>
+
+      <p>Same flow as before. Generate the prompt, paste it into a Cowork scheduled task, set the frequency, enable it.</p>
+
+      <h2>Skill 3: Scheduled Email Responder</h2>
+
+      <h3>What it does</h3>
+
+      <p>Every hour, the skill:</p>
+
+      <ol>
+        <li>Checks my inbox for new threads</li>
+        <li>Skips newsletters, marketing, automated notifications, and calendar invites</li>
+        <li>For everything else, reads the thread and drafts a reply in my voice</li>
+        <li>Flags sensitive or complex threads with <code>[PLEASE REVIEW]</code></li>
+        <li>Marks uncertain factual claims with <code>[VERIFY]</code></li>
+      </ol>
+
+      <p>This skill works very similarly to the Slack responder but operates on email threads. Voice cloning from sent mail, tone adaptation by audience, scheduling-link auto-insertion for meeting requests, and the Gmail draft creation tool for safe drafting.</p>
+
+      <h3>Two hard-won rules</h3>
+
+      <p>After running this skill for a few weeks, I discovered two failure modes that needed explicit instruction to fix. Both are baked into the setup prompt above, but they're worth calling out because they're not obvious until you've seen them go wrong.</p>
+
+      <p><strong>Rule 1: Always reply-all.</strong> Out of the box, the skill will quietly reply only to the sender, dropping everyone else on the thread. The fix is a step-by-step recipient extraction in the prompt: read the most recent message, take the From into <code>to</code>, take the To header into <code>to</code>, take the Cc header into <code>cc</code>, remove your own address, deduplicate. If the resulting <code>to</code> list is empty (the only other participant was you), skip the thread. Reply-only-to-sender is never acceptable unless the thread has one other participant and no Cc field.</p>
+
+      <p><strong>Rule 2: The draft must thread into the original conversation.</strong> Gmail stitches drafts into the right thread by matching the subject line. If the subject is even slightly off (extra "Re:" prefix, normalized casing, trimmed whitespace, "cleaned up" punctuation), the draft lands as a standalone message and you have to manually fix it. The fix: copy the subject of the most recent message in the thread byte-for-byte. If it already starts with "Re:", use it as-is. If it doesn't, prepend exactly <code>Re: </code> and append the rest unchanged. Don't trim, don't normalize, don't translate, don't shorten. Also don't include any quoted body from the original.</p>
+
+      <p>If your version of the Gmail draft tool also supports a <code>replyToMessageId</code> parameter, pass it as a belt-and-braces backup. But subject-matching is the primary mechanism and you should not rely on <code>replyToMessageId</code> alone.</p>
+
+      <p>These two rules are the difference between a skill that saves you time and a skill that creates more work cleaning up its mistakes.</p>
+
+      <h2>How the three skills work together</h2>
+
+      <p>Here's where it gets interesting.</p>
+
+      <p>The meeting analyzer <strong>proposes updates</strong> to product packs. I apply them. The Slack and email responders <strong>read the (now-updated) packs</strong> when drafting replies.</p>
+
+      <p>That means if you have a meeting in the morning where you decide to push a feature launch date from May 15 to June 1, the meeting analyzer outputs that as an update proposal. You paste the new date into the pack at 11am. Every Slack message and email drafted later that day that asks about the launch date will already know.</p>
+
+      <p>You don't have to tell the Slack responder about the meeting. You don't have to brief the email drafter on the decision. The pack updates (with your manual paste), and the whole system knows from that point forward.</p>
+
+      <p>This is the compounding part. Each skill on its own saves you maybe 30-60 minutes a day. Together, with a shared source of truth, they become a coherent operating system.</p>
+
+      <h2>What I learned building this</h2>
+
+      <p>A few things that weren't obvious at the start:</p>
+
+      <p><strong>The hard part isn't the AI. It's the plumbing.</strong> Matching meetings to the right docs. Keeping the voice consistent across skills. Knowing when to draft versus when to escalate. Working around the limitations of the tools (like the Google Drive integration not supporting doc edits). The prompt is 20% of the work. The other 80% is the rules around the prompt.</p>
+
+      <p><strong>Scheduled tasks beat chat.</strong> A skill that runs every 30 minutes without me asking is 10x more useful than one I have to summon. The friction of "open Claude, ask the question, wait for the answer" is what kills most assistant use cases. Remove the friction and the value shows up.</p>
+
+      <p><strong>Always draft, never send.</strong> This one is non-negotiable. I review every output before anything goes out. The skill is my assistant, not my replacement. And I've caught enough tone misses in the first few weeks that I never want to remove the review step.</p>
+
+      <p><strong>A project index is the unlock.</strong> One source of truth that tells the skills "this meeting = this doc" is worth more than any prompt tweak. Without the index, the skills have to guess. With the index, they're deterministic about which pack the analysis applies to.</p>
+
+      <p><strong>Be honest about integration limits.</strong> When I first designed this, I assumed Claude could edit Google Docs directly. It can't. Reframing the skill around "structured proposals you manually apply" instead of "automatic updates" required a redesign, but the redesigned version actually works.</p>
+
+      <p><strong>Start with one skill, then add.</strong> Don't try to build all three at once. Build the one that saves you the most time (for me, that's the meeting analyzer). Run it for two weeks. Refine the voice and the rules. Then add the next one.</p>
+
+      <p><strong>Regenerate the voice profile every month.</strong> Your writing evolves. The projects you work on shift. Re-run the setup prompts every few weeks to refresh the voice and context.</p>
+
+      <h2>A quick starter checklist</h2>
+
+      <p>If you want to build this yourself, here's the order I'd go in:</p>
+
+      <ol>
+        <li>Enable Claude Desktop with Cowork</li>
+        <li>Connect Gmail, Google Calendar, Google Drive, and Slack as integrations</li>
+        <li>Create your Project Index Google Doc with Configuration, Mappings, and Processed Log sections</li>
+        <li>Create your Meeting Intelligence folder in Google Drive</li>
+        <li>Paste the folder's ID into the Configuration section of the index</li>
+        <li>Create your first product pack Doc for one active workstream</li>
+        <li>Generate the Meeting Notes Analyzer prompt using the setup prompt above</li>
+        <li>Create a Cowork scheduled task, paste the prompt, set frequency to 30 minutes, weekdays only</li>
+        <li>Let it run for two weeks, refining the voice and rules as you go</li>
+        <li>Once the meeting analyzer is working, add the Slack responder</li>
+        <li>Once Slack is stable, add the email responder</li>
+      </ol>
+
+      <p>Start small. Don't try to automate everything at once. The goal is to reclaim hours, not to build a complicated system that needs constant babysitting.</p>
+
+      <h2>One final note on privacy</h2>
+
+      <p>Everything I've described runs on your own accounts with your own data. The skills read your emails, meetings, and Slack messages because you're asking them to. They don't share that data with anyone. The drafts stay drafts until you send them. The update proposals stay as structured text in the Cowork output and the Intelligence Doc until you manually paste them into your product packs.</p>
+
+      <p>If you're doing this inside a regulated company, check with your IT and legal teams first. Some organizations restrict which AI tools can read corporate email. Some require specific data-handling agreements. Don't assume you can just turn this on without asking.</p>
+
+      <p>For everyone else, this is safer than the alternative, which is a dozen half-built tools from a dozen vendors, each with their own data handling policies.</p>
+
+      <p>Build one system. Review every output. Own the process.</p>
+    </article>
+
+    <div class="divider"></div>
+
+    <section class="project-cta">
+      <h2 class="cta-title">Get the full guide</h2>
+      <p class="cta-desc">A printable PDF version of this playbook with the prompts, tables, and checklist laid out for reference.</p>
+      <a href="/media/claude-admin-playbook.pdf" target="_blank" rel="noopener" class="btn btn-primary pdf-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Download the Guide (PDF)
+      </a>
+      <p class="cta-related">
+        Related: <a href="/projects/ai-email-responder">Build an AI Email Responder That Sounds Like You</a>. The original deep dive on Skill 3.
+      </p>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover { color: var(--text); }
+
+  .project-header {
+    max-width: 720px;
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .status-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .project-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .project-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+    max-width: 620px;
+  }
+
+  .pdf-btn {
+    gap: 0.5rem;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  /* Long-form prose */
+  .prose {
+    max-width: 720px;
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .prose p {
+    margin-bottom: 1.1rem;
+    color: var(--text);
+  }
+
+  .prose p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .prose em {
+    font-style: italic;
+    color: var(--text);
+  }
+
+  .prose h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-top: 2.75rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .prose h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--text);
+  }
+
+  .prose ul,
+  .prose ol {
+    margin: 0 0 1.25rem 1.4rem;
+    color: var(--text);
+  }
+
+  .prose ul li,
+  .prose ol li {
+    margin-bottom: 0.45rem;
+    line-height: 1.65;
+  }
+
+  .prose ul li strong,
+  .prose ol li strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .prose code {
+    font-size: 0.82rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-family: "SF Mono", "Fira Code", monospace;
+    color: var(--accent-hover);
+  }
+
+  /* Config block (small monospace) */
+  .config-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .config-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.85rem 1.1rem;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+    overflow-x: auto;
+  }
+
+  .config-block .placeholder {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Prompt block (dark code) */
+  .prompt-block {
+    background: #0b0b14;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.15rem;
+    font-family: "SF Mono", "Fira Code", monospace;
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: #e8e6f0;
+    margin: 1rem 0 1.5rem 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+
+  .prompt-block .comment {
+    color: #8b8bb3;
+    font-style: italic;
+  }
+
+  .prompt-block .highlight {
+    color: #c8e64a;
+    font-weight: 600;
+  }
+
+  /* Tables */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0 1.25rem 0;
+    font-size: 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .data-table th {
+    background: var(--surface-2);
+    text-align: left;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table td {
+    padding: 0.65rem 0.85rem;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table .muted-row {
+    color: var(--text-subtle);
+    font-style: italic;
+    text-align: center;
+  }
+
+  /* CTA */
+  .project-cta {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 620px;
+  }
+
+  .cta-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .cta-related {
+    margin-top: 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .cta-related a {
+    color: var(--accent);
+    transition: color 0.15s;
+  }
+
+  .cta-related a:hover {
+    color: var(--accent-hover);
+  }
+</style>
