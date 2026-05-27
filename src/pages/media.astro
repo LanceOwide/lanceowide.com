@@ -16,6 +16,7 @@ const appearances: {
   youtubeId?: string;
   videoStart?: number;
   videoEnd?: number;
+  thumbnail?: string;
 }[] = [
   {
     date: '2026-04-30',
@@ -29,6 +30,7 @@ const appearances: {
     youtubeId: '-ojrqezvSIg',
     videoStart: 1498,
     videoEnd: 2068,
+    thumbnail: '/media/commerce-live-2026-keynote.jpg',
   },
   {
     date: '2026-04-30',
@@ -826,7 +828,7 @@ const counts: Record<FilterKey, number> = {
               aria-label={`Play: ${item.title}`}
             >
               <img
-                src={`https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
+                src={item.thumbnail ?? `https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`}
                 alt={item.title}
                 loading="lazy"
               />
