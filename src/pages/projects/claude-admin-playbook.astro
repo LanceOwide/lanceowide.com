@@ -168,7 +168,52 @@ LOOKBACK_HOURS: 4</pre>
 
       <p>The Aliases column is doing real work. When the skill reads a transcript and someone says "the PO flow thing," it needs to know that maps to PO Automation. Put every nickname, acronym, and shorthand you use in there.</p>
 
-      <p><strong>The Meeting Intelligence folder.</strong> A folder in your Google Drive where the skill will create one new doc per run. Create it, copy its folder ID, paste it into the Configuration section of the index.</p>
+      <p><strong>The Meeting Intelligence folder.</strong> A folder in your Google Drive where the skill will create one new doc per run. Create it, copy its folder ID, paste it into the Configuration section of the index. Build Parts 2 and 3 of the Project Index as real Google Docs tables (Insert &gt; Table), not as plain text — the skills look for table rows.</p>
+
+      <h3>Product pack template (one per workstream)</h3>
+
+      <p>Create one Google Doc per active project. The meeting analyzer's Update Proposals reference specific sections by name, so use these section headings verbatim so proposals slot in cleanly:</p>
+
+      <pre class="config-block">PRODUCT PACK: [Project Name]
+Last updated: [YYYY-MM-DD]
+
+SCOPE
+One paragraph: what we are building and for whom.
+
+STATUS
+Current state, target launch date, blockers.
+
+OPEN QUESTIONS
+- Bullet list of unresolved decisions
+
+DECISIONS
+- YYYY-MM-DD: short statement of the decision
+- YYYY-MM-DD: another decision
+
+METRICS
+- Test set accuracy: X%
+- Pilot volume: Y
+
+RISKS
+- Bullet list of known risks
+
+ACTION ITEMS
+- Owner to do X by YYYY-MM-DD
+- Owner to do Y by YYYY-MM-DD
+
+PILOT CUSTOMER (or KEY STAKEHOLDERS)
+Names, companies, contact emails.</pre>
+
+      <p>Keep the pack short, under one page is ideal. The skills read every active pack on every run, so length costs latency and token budget.</p>
+
+      <h3>How to find a Google Doc ID or Folder ID</h3>
+
+      <p>Open the doc or folder in Drive. The ID is the long alphanumeric string in the URL between <code>/d/</code> (for Docs) or <code>/folders/</code> (for folders) and the next <code>/</code>:</p>
+
+      <pre class="config-block">Doc:    https://docs.google.com/document/d/1y2qeTw1CK2Us7MO41bkf6eWWk2nIaXoZdqC1hmghL2c/edit
+Folder: https://drive.google.com/drive/folders/1Zkcqx95GydymZFs6X-mCYneHKWYmEET9</pre>
+
+      <p>Copy that string. Paste it into the highlighted placeholders in the setup prompts below.</p>
 
       <h3>The setup prompt</h3>
 
@@ -180,7 +225,7 @@ LOOKBACK_HOURS: 4</pre>
 Every time this runs, search my Google Calendar for events that ended within the last <span class="highlight">[LOOKBACK WINDOW, e.g., 4 hours]</span>. For each event, check if it has attached Google Docs (notes or transcripts). Skip events with no attachments.
 
 <span class="comment">-- Deduplication --</span>
-I have a Project Index Google Doc at Doc ID <span class="highlight">[YOUR INDEX DOC ID]</span>. In that doc is a "Processed Meetings Log" table. Read that table to identify already-processed meetings. Skip any meeting whose title and date already appear there. At the end of the run, output the newly-processed meetings as a copy-paste-ready row block so I can manually append them to the log table.
+I have a Project Index Google Doc at Doc ID <span class="highlight">[YOUR INDEX DOC ID]</span>. In that doc is a "Processed Meetings Log" table with columns: Date, Title, Transcript Doc ID, Matched Project(s), Intelligence Doc ID. Read that table to identify already-processed meetings. Dedup by the Transcript Doc ID column (not by title) since titles can vary slightly. At the end of the run, output the newly-processed meetings as a copy-paste-ready row block so I can manually append them to the log table.
 
 <span class="comment">-- Project matching and memory lookup (REQUIRED) --</span>
 The Project Index contains a table mapping project names and aliases to product pack Doc IDs. For each meeting transcript:
@@ -192,7 +237,7 @@ The Project Index contains a table mapping project names and aliases to product 
 The Google Drive integration cannot edit, append to, or comment on existing Google Docs. Do NOT attempt to modify product packs directly. Instead, for every matched project, generate a structured "Update Proposal" block in the task output AND in the new Meeting Intelligence Doc (see below). Each proposal should specify: (1) the product pack Doc ID and title, (2) the section of the pack it applies to, (3) the specific text to add/change/remove, (4) the source (meeting + speaker), and (5) the rationale. Format proposals so I can copy-paste them directly into the relevant pack section.
 
 <span class="comment">-- Meeting Intelligence Doc --</span>
-After analyzing each run's meetings, create a new Google Doc in folder ID <span class="highlight">[YOUR INTELLIGENCE FOLDER ID]</span> titled "Meeting Intelligence: [YYYY-MM-DD HH:MM]". Content: (1) meetings processed, (2) matched projects per meeting, (3) all update proposals grouped by product pack, (4) action items grouped by owner, (5) cross-project impact notes, (6) new risks surfaced, (7) unmatched discussions.
+After analyzing each run's meetings, create a new Google Doc in folder ID <span class="highlight">[YOUR INTELLIGENCE FOLDER ID]</span> titled "Meeting Intelligence: [YYYY-MM-DD HH:MM] [TIMEZONE]" using the current run time (e.g., "Meeting Intelligence: 2026-05-31 14:00 PT"). Content: (1) meetings processed, (2) matched projects per meeting, (3) all update proposals grouped by product pack, (4) action items grouped by owner with absolute YYYY-MM-DD due dates (interpret any relative dates from the transcript like "by Monday" as the closest future date), (5) cross-project impact notes, (6) new risks surfaced, (7) unmatched discussions.
 
 <span class="comment">-- Follow-up emails --</span>
 For meetings with 8 or fewer attendees, draft a Gmail recap email to all attendees. Subject line: "Follow up: [Meeting Title]". Write in my voice. Use my name <span class="highlight">[YOUR NAME]</span> in the sign-off. Never send. Always create as a draft.
@@ -201,7 +246,7 @@ For meetings with 8 or fewer attendees, draft a Gmail recap email to all attende
 Before drafting any emails, search my sent Gmail from <span class="highlight">[DATE RANGE]</span> and study my writing patterns. Apply that voice to every draft.
 
 <span class="comment">-- Safety guardrails --</span>
-Never send emails automatically. Never attempt to edit existing Google Docs (the integration does not support it). If a meeting discusses a project not in my index, include it in the Intelligence Doc under "Unmatched Discussions" and flag that keywords might need to be added.
+Never send emails automatically. Never attempt to edit existing Google Docs (the integration does not support it). If a meeting discusses a project not in my index, include it in the Intelligence Doc under "Unmatched Discussions" and flag that keywords might need to be added. Flag uncertain factual claims with [VERIFY] inline next to the claim. Flag drafts that touch sensitive topics (personnel, compensation, legal, budget commitments to customers) with [PLEASE REVIEW] at the top of the draft.
 
 <span class="comment">-- Schedule --</span>
 Run every <span class="highlight">[FREQUENCY, e.g., 30 minutes]</span> during business hours on weekdays.
@@ -269,8 +314,9 @@ Before drafting any reply, do this in order:
 2. Read the Project Mappings table to get the full list of project names, aliases, and product pack Doc IDs.
 3. Scan the message and thread for any project name, alias, or shorthand from the table (case-insensitive, partial match).
 4. For every project mentioned (even in passing), open the matching product pack via its Doc ID and read it fully.
-5. Use the pack contents (current status, decisions, commitments, action items) to make the draft accurate and specific. Reference recent decisions by name where relevant. Do NOT ask "what is the status?" if the pack already answers it.
-6. If a project mentioned in the thread is NOT in the index, flag the draft at the top with [NEW PROJECT: name] so I can add it to the index later.
+5. ALSO check the Meeting Intelligence folder ID <span class="highlight">[YOUR INTELLIGENCE FOLDER ID]</span> for the most recent Intelligence Doc (sort by Modified date). If its timestamp is more recent than the matched pack's "Last updated" line, read its Update Proposals for the matched project. Those reflect decisions the user has not yet pasted into the pack. Prefer them over older pack content when they conflict, and append [VERIFY: from unapplied proposal] inline next to any number/date you draw from there.
+6. Use the pack contents (current status, decisions, commitments, action items), augmented by any fresher proposals from step 5, to make the draft accurate and specific. Reference recent decisions by name where relevant. Do NOT ask "what is the status?" if the pack or proposals already answer it.
+7. If a project mentioned in the thread is NOT in the index, flag the draft at the top with [NEW PROJECT: name] so I can add it to the index later.
 
 If no project is mentioned in the thread, draft using thread context and voice profile alone.
 
@@ -284,7 +330,7 @@ Different audiences get different tones. With direct reports, be short and direc
 Only draft replies for messages that actually need a response. Skip FYI messages, automated notifications, channel-wide announcements, and messages where someone else has already answered. If a message is asking for a meeting, include my scheduling link: <span class="highlight">[YOUR SCHEDULING LINK]</span>.
 
 <span class="comment">-- Safety guardrails --</span>
-Never send messages automatically. Always use the Slack draft tool to create drafts. Flag drafts about sensitive topics (personnel, compensation, legal, budget) with [PLEASE REVIEW] at the top. Mark any uncertain factual claims with [VERIFY].
+Never send messages automatically. Always use the Slack draft tool to create drafts. If the Slack draft tool is not available in this run, output the draft as plain text in the task log with a clear "DRAFT FOR [channel/DM]:" header so I can paste it manually. Flag uncertain factual claims with [VERIFY] inline next to the claim. Flag drafts that touch sensitive topics (personnel, compensation, legal, budget commitments) with [PLEASE REVIEW] at the top of the draft.
 
 <span class="comment">-- Schedule --</span>
 Run every <span class="highlight">[FREQUENCY, e.g., hour]</span> during business hours on weekdays.
@@ -308,7 +354,7 @@ Give me the final prompt as plain text I can paste into a Cowork scheduled task.
         <li>Marks uncertain factual claims with <code>[VERIFY]</code></li>
       </ol>
 
-      <p>This skill works very similarly to the Slack responder but operates on email threads. Voice cloning from sent mail, tone adaptation by audience, scheduling-link auto-insertion for meeting requests, and the Gmail draft creation tool for safe drafting. And critically: the same required memory-lookup step the Slack responder uses. Before drafting any reply, the skill opens the Project Index, finds which projects are referenced in the email, opens those product packs, and uses what is in them to make the draft accurate. Use the same <code>[YOUR INDEX DOC ID]</code> here that you used for the other two skills.</p>
+      <p>This skill works very similarly to the Slack responder but operates on email threads. Voice cloning from sent mail, tone adaptation by audience, scheduling-link auto-insertion for meeting requests, and the Gmail draft creation tool for safe drafting. And critically: the same required memory-lookup step the Slack responder uses, including the freshness check against the most recent Intelligence Doc in case you have not yet pasted in the latest meeting analyzer proposals. Before drafting any reply, the skill opens the Project Index, finds which projects are referenced in the email, opens those product packs, checks the Intelligence folder for fresher proposals, and uses all of that to make the draft accurate. Use the same <code>[YOUR INDEX DOC ID]</code> and <code>[YOUR INTELLIGENCE FOLDER ID]</code> here that you used for the other two skills.</p>
 
       <h3>Two hard-won rules</h3>
 
