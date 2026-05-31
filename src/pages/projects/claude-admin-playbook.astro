@@ -74,6 +74,8 @@ import Layout from '../../layouts/Layout.astro';
 
       <p>The product docs are the shared brain. The skills are the hands. <strong>I'm the one doing the paste, but the thinking is done.</strong></p>
 
+      <p>One important detail before the setup: all three skill prompts in this playbook ask you to paste the same <code>[YOUR INDEX DOC ID]</code>. Use the same value in all three. That single Doc ID is what wires the shared brain together. Different Doc IDs in different skills = three assistants that do not know about each other.</p>
+
       <h2>An honest note on what Claude can and can't do with Google Docs</h2>
 
       <p>I want to address something upfront because it shapes how this whole system works.</p>
@@ -180,8 +182,11 @@ Every time this runs, search my Google Calendar for events that ended within the
 <span class="comment">-- Deduplication --</span>
 I have a Project Index Google Doc at Doc ID <span class="highlight">[YOUR INDEX DOC ID]</span>. In that doc is a "Processed Meetings Log" table. Read that table to identify already-processed meetings. Skip any meeting whose title and date already appear there. At the end of the run, output the newly-processed meetings as a copy-paste-ready row block so I can manually append them to the log table.
 
-<span class="comment">-- Project matching --</span>
-The Project Index contains a table mapping project names and aliases to product pack Doc IDs. For each meeting transcript, read every active project pack first to load context, then scan the transcript against all active projects and tag every project that is meaningfully discussed (not just mentioned). A project qualifies if a decision was made about it, an action item was assigned, scope or timeline was discussed, or dependencies were raised.
+<span class="comment">-- Project matching and memory lookup (REQUIRED) --</span>
+The Project Index contains a table mapping project names and aliases to product pack Doc IDs. For each meeting transcript:
+1. Read every active project pack first to load full context. You must actually open each pack via its Doc ID and read it, not just glance at the title.
+2. Scan the transcript against all active projects and tag every project that is meaningfully discussed (not just mentioned). A project qualifies if a decision was made about it, an action item was assigned, scope or timeline was discussed, or dependencies were raised.
+3. When generating Update Proposals (next step), compare what was said in the meeting against what is already in the pack. Only propose NEW information or CHANGES. Do NOT propose adding anything the pack already documents. This is what makes the shared brain work.
 
 <span class="comment">-- Update proposals (IMPORTANT) --</span>
 The Google Drive integration cannot edit, append to, or comment on existing Google Docs. Do NOT attempt to modify product packs directly. Instead, for every matched project, generate a structured "Update Proposal" block in the task output AND in the new Meeting Intelligence Doc (see below). Each proposal should specify: (1) the product pack Doc ID and title, (2) the section of the pack it applies to, (3) the specific text to add/change/remove, (4) the source (meeting + speaker), and (5) the rationale. Format proposals so I can copy-paste them directly into the relevant pack section.
@@ -256,7 +261,18 @@ Give me the final prompt as plain text that I can paste directly into a Cowork s
 Every time this runs, search Slack for DMs and @mentions directed at me that I haven't responded to. Focus on messages from the last <span class="highlight">[LOOKBACK WINDOW, e.g., 24 hours]</span>. Skip messages I've already replied to, bot notifications, and channels where I'm a passive member.
 
 <span class="comment">-- Context loading --</span>
-For each message that needs a reply, read the full thread or recent channel history so the draft has proper context. If the message references a project I work on, you can also read the matching product pack via my Project Index for added context.
+For each message that needs a reply, read the full thread or recent channel history so the draft has proper context.
+
+<span class="comment">-- Memory lookup (REQUIRED before drafting) --</span>
+Before drafting any reply, do this in order:
+1. Open my Project Index Google Doc at Doc ID <span class="highlight">[YOUR INDEX DOC ID]</span>. This is the same Index Doc ID used by the meeting analyzer.
+2. Read the Project Mappings table to get the full list of project names, aliases, and product pack Doc IDs.
+3. Scan the message and thread for any project name, alias, or shorthand from the table (case-insensitive, partial match).
+4. For every project mentioned (even in passing), open the matching product pack via its Doc ID and read it fully.
+5. Use the pack contents (current status, decisions, commitments, action items) to make the draft accurate and specific. Reference recent decisions by name where relevant. Do NOT ask "what is the status?" if the pack already answers it.
+6. If a project mentioned in the thread is NOT in the index, flag the draft at the top with [NEW PROJECT: name] so I can add it to the index later.
+
+If no project is mentioned in the thread, draft using thread context and voice profile alone.
 
 <span class="comment">-- Voice cloning --</span>
 Search my sent Slack messages from <span class="highlight">[DATE RANGE]</span> to build a voice profile. Apply that voice to every draft. On Slack I'm more casual than email.
@@ -276,7 +292,7 @@ Run every <span class="highlight">[FREQUENCY, e.g., hour]</span> during business
 <span class="comment">-- Output --</span>
 Give me the final prompt as plain text I can paste into a Cowork scheduled task. Not code, not HTML. Just the prompt.</pre>
 
-      <p>Same flow as before. Generate the prompt, paste it into a Cowork scheduled task, set the frequency, enable it.</p>
+      <p>Same flow as before. Generate the prompt, paste it into a Cowork scheduled task, set the frequency, enable it. Critical: when you paste the prompt, replace <code>[YOUR INDEX DOC ID]</code> with the same Doc ID you used for the meeting analyzer. All three skills must point at the same Project Index for the shared brain to work.</p>
 
       <h2>Skill 3: Scheduled Email Responder</h2>
 
@@ -292,7 +308,7 @@ Give me the final prompt as plain text I can paste into a Cowork scheduled task.
         <li>Marks uncertain factual claims with <code>[VERIFY]</code></li>
       </ol>
 
-      <p>This skill works very similarly to the Slack responder but operates on email threads. Voice cloning from sent mail, tone adaptation by audience, scheduling-link auto-insertion for meeting requests, and the Gmail draft creation tool for safe drafting.</p>
+      <p>This skill works very similarly to the Slack responder but operates on email threads. Voice cloning from sent mail, tone adaptation by audience, scheduling-link auto-insertion for meeting requests, and the Gmail draft creation tool for safe drafting. And critically: the same required memory-lookup step the Slack responder uses. Before drafting any reply, the skill opens the Project Index, finds which projects are referenced in the email, opens those product packs, and uses what is in them to make the draft accurate. Use the same <code>[YOUR INDEX DOC ID]</code> here that you used for the other two skills.</p>
 
       <h3>Two hard-won rules</h3>
 
