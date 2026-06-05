@@ -18,7 +18,19 @@ const appearances: {
   videoEnd?: number;
   thumbnail?: string;
   featured?: boolean;
+  upcoming?: boolean;
 }[] = [
+  {
+    date: '2026-06-04',
+    filter: 'video',
+    badge: 'Webinar',
+    role: 'Featured Speaker',
+    outlet: 'BigCommerce Insights',
+    title: 'The New B2B Buyer Journey: How AI Is Reshaping Buyer Behavior',
+    description: 'Live webinar with Christopher Osos on zero-click research, AI buyer behavior, and how machine-readable content shapes discovery for manufacturers and distributors.',
+    url: 'https://www.bigcommerce-insights.com/ecommerce-reshaped-session-1/',
+    upcoming: true,
+  },
   {
     date: '2026-04-30',
     filter: 'conference',
@@ -920,6 +932,9 @@ const counts: Record<FilterKey, number> = {
             </div>
             <div class="media-item-body">
               <div class="media-top">
+                {item.upcoming && (
+                  <span class="badge badge-upcoming" data-upcoming-until={item.date}>Upcoming</span>
+                )}
                 <span class={`badge badge-${item.filter}`}>{item.badge}</span>
                 <span class="media-date">{item.date}</span>
               </div>
@@ -946,6 +961,9 @@ const counts: Record<FilterKey, number> = {
             </div>
             <div class="media-item-body">
               <div class="media-top">
+                {item.upcoming && (
+                  <span class="badge badge-upcoming" data-upcoming-until={item.date}>Upcoming</span>
+                )}
                 <span class={`badge badge-${item.filter}`}>{item.badge}</span>
                 <span class="media-date">{item.date}</span>
               </div>
@@ -988,6 +1006,17 @@ const counts: Record<FilterKey, number> = {
 
       noResults.style.display = visible === 0 ? 'block' : 'none';
     });
+  });
+
+  // Auto-remove the "Upcoming" badge once the event date has passed.
+  // Uses end-of-day so the badge stays visible all day on the event date.
+  document.querySelectorAll<HTMLElement>('[data-upcoming-until]').forEach(el => {
+    const until = el.dataset.upcomingUntil;
+    if (!until) return;
+    const eventEnd = new Date(until + 'T23:59:59');
+    if (!isNaN(eventEnd.getTime()) && eventEnd.getTime() < Date.now()) {
+      el.remove();
+    }
   });
 
   // Click-to-play for YouTube video thumbs
@@ -1145,6 +1174,15 @@ const counts: Record<FilterKey, number> = {
     color: #a78bfa;
     background: rgba(167, 139, 250, 0.1);
     border: 1px solid rgba(167, 139, 250, 0.2);
+  }
+
+  .badge-upcoming {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.28);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
   }
 
   .media-date {
